@@ -2,41 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Accounting System Design System - Professional Financial Interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base System Colors */
+    --background: 0 0% 97.6%; /* #F9F9F9 */
+    --foreground: 199 100% 20.2%; /* #004A67 */
 
+    /* Card & Surface Colors */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 199 100% 20.2%;
+    --card-border: 0 0% 90%;
 
+    /* Popover Colors */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 199 100% 20.2%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary Brand Colors */
+    --primary: 199 100% 20.2%; /* #004A67 */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 199 100% 16%;
+    --primary-light: 199 30% 85%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary Colors */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 199 100% 20.2%;
+    --secondary-hover: 0 0% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted Colors for subtle elements */
+    --muted: 0 0% 95%;
+    --muted-foreground: 199 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent Colors for highlights */
+    --accent: 199 30% 85%;
+    --accent-foreground: 199 100% 20.2%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Status Colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Border & Input Colors */
+    --border: 0 0% 88%;
+    --input: 0 0% 100%;
+    --input-border: 0 0% 85%;
+    --ring: 199 100% 20.2%;
 
+    /* Financial Data Colors */
+    --income: 142 76% 36%;
+    --expense: 0 84% 60%;
+    --balance: 199 100% 20.2%;
+    --pending: 38 92% 50%;
+
+    /* Chart Colors */
+    --chart-1: 199 100% 20.2%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 262 83% 58%;
+    --chart-5: 173 58% 39%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(199 100% 20.2%), hsl(199 100% 16%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 98%));
+    --gradient-income: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 32%));
+    --gradient-expense: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 56%));
+
+    /* Shadows */
+    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
+    --shadow-primary: 0 4px 14px 0 hsl(199 100% 20.2% / 0.25);
+
+    /* Spacing & Layout */
     --radius: 0.5rem;
+    --radius-lg: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +142,70 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  /* Financial Card Component */
+  .financial-card {
+    @apply bg-card border border-card-border rounded-lg shadow-card p-6;
+    background: var(--gradient-card);
+  }
+
+  /* Status Indicators */
+  .status-income {
+    @apply text-success bg-success/10 px-2 py-1 rounded-md text-sm font-medium;
+  }
+
+  .status-expense {
+    @apply text-destructive bg-destructive/10 px-2 py-1 rounded-md text-sm font-medium;
+  }
+
+  .status-pending {
+    @apply text-warning bg-warning/10 px-2 py-1 rounded-md text-sm font-medium;
+  }
+
+  /* Metric Cards */
+  .metric-card {
+    @apply financial-card hover:shadow-lg transition-all duration-200;
+  }
+
+  .metric-value {
+    @apply text-2xl font-bold text-foreground;
+  }
+
+  .metric-label {
+    @apply text-sm text-muted-foreground;
+  }
+
+  /* Data Table Styles */
+  .data-table {
+    @apply w-full border-collapse bg-card rounded-lg overflow-hidden shadow-card;
+  }
+
+  .data-table th {
+    @apply bg-primary text-primary-foreground px-4 py-3 text-left font-semibold;
+  }
+
+  .data-table td {
+    @apply px-4 py-3 border-b border-border;
+  }
+
+  .data-table tr:hover {
+    @apply bg-muted/50;
+  }
+
+  /* Custom Button Variants */
+  .btn-financial {
+    @apply bg-primary hover:bg-primary-hover text-primary-foreground px-4 py-2 rounded-md font-medium transition-colors;
+  }
+
+  .btn-success {
+    @apply bg-success hover:bg-success/90 text-success-foreground px-4 py-2 rounded-md font-medium transition-colors;
+  }
+
+  .btn-outline-financial {
+    @apply border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-4 py-2 rounded-md font-medium transition-all;
   }
 }
