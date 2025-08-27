@@ -1,6 +1,7 @@
 import { Bell, Search, User, LogOut, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 export function TopBar() {
+  const { language, setLanguage } = useLanguage();
+  
   return (
     <header className="h-16 bg-card border-b border-card-border px-6 flex items-center justify-between">
       <div className="flex items-center space-x-4 flex-1">
@@ -31,14 +34,14 @@ export function TopBar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="hover:bg-primary-light/20">
               <Globe className="w-4 h-4 mr-2" />
-              EN
+              {language === 'en' ? 'EN' : 'ລາວ'}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-card border-card-border">
-            <DropdownMenuItem className="hover:bg-primary-light/20">
+            <DropdownMenuItem className="hover:bg-primary-light/20" onClick={() => setLanguage('en')}>
               <span>English</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-primary-light/20">
+            <DropdownMenuItem className="hover:bg-primary-light/20" onClick={() => setLanguage('lo')}>
               <span>ລາວ (Lao)</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
