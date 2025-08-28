@@ -84,8 +84,7 @@ export function AppSidebar() {
                 <DollarSign className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-foreground">NucleusFin</h2>
-                <p className="text-xs text-muted-foreground">Accounting System</p>
+                <h2 className="text-xs font-bold text-foreground">Accounting System</h2>
               </div>
             </div>
           )}
