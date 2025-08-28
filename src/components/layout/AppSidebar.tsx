@@ -27,11 +27,11 @@ import { Button } from "@/components/ui/button";
 
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
-  { title: "Cash Management", url: "/cash", icon: DollarSign },
-  { title: "Member Savings", url: "/savings", icon: Users },
-  { title: "Shares Tracking", url: "/shares", icon: PieChart },
-  { title: "Loan Management", url: "/loans", icon: CreditCard },
-  { title: "General Ledger", url: "/ledger", icon: FileText },
+  { title: "Cash Management", url: "/cash-management", icon: DollarSign },
+  { title: "Member Savings", url: "/member-savings", icon: Users },
+  { title: "Shares Tracking", url: "/shares-tracking", icon: PieChart },
+  { title: "Loan Management", url: "/loan-management", icon: CreditCard },
+  { title: "General Ledger", url: "/general-ledger", icon: FileText },
   { title: "Reports & Analytics", url: "/reports", icon: BarChart3 },
 ];
 
