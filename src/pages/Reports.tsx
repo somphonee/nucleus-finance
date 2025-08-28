@@ -49,7 +49,7 @@ export default function Reports() {
     { category: "Member Savings", amount: 4200000, notes: "Regular monthly deposits" },
     { category: "Loan Interest", amount: 1800000, notes: "Interest from active loans" },
     { category: "Share Contributions", amount: 1500000, notes: "New share purchases" },
-    { category: "Investment Returns", value: 800000, notes: "Fixed deposit returns" },
+    { category: "Investment Returns", amount: 800000, notes: "Fixed deposit returns" },
   ];
 
   const monthlyExpenseReport = [
