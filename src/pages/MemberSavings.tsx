@@ -1,5 +1,4 @@
 import { Plus, Download, Search, Eye, Edit, DollarSign, Users, Calendar } from "lucide-react";
-import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -86,8 +85,7 @@ const MemberSavings = () => {
   const monthlyTotal = mockMembers.reduce((sum, member) => sum + member.monthlyDeposit, 0);
 
   return (
-    <AppLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -238,7 +236,6 @@ const MemberSavings = () => {
           </div>
         </div>
       </div>
-    </AppLayout>
   );
 };
 
