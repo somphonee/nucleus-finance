@@ -1,5 +1,4 @@
 import { DollarSign, Users, PieChart, TrendingUp, TrendingDown, Calendar } from "lucide-react";
-import { AppLayout } from "@/components/layout/AppLayout";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { QuickActionsCard } from "@/components/dashboard/QuickActionsCard";
 import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
@@ -7,8 +6,7 @@ import { FinancialChart } from "@/components/charts/FinancialChart";
 
 const Index = () => {
   return (
-    <AppLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -93,7 +91,6 @@ const Index = () => {
           />
         </div>
       </div>
-    </AppLayout>
   );
 };
 

@@ -1,5 +1,4 @@
 import { Plus, Download, Filter, Search } from "lucide-react";
-import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -78,8 +77,7 @@ const CashManagement = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -193,7 +191,6 @@ const CashManagement = () => {
           </div>
         </div>
       </div>
-    </AppLayout>
   );
 };
 
