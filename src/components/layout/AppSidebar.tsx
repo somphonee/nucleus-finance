@@ -52,8 +52,8 @@ export function AppSidebar() {
   const isActive = (path: string) => currentPath === path;
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     isActive 
-      ? "bg-primary text-primary-foreground font-medium shadow-primary" 
-      : "hover:bg-primary-light/20 hover:text-primary transition-colors";
+      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" 
+      : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors";
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const allItems = [...navigationItems, ...systemItems];
@@ -75,16 +75,19 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className={`${collapsed ? "w-16" : "w-64"} transition-all duration-300 bg-card border-r border-card-border`}>
-      <SidebarHeader className="p-4 border-b border-card-border">
+    <Sidebar 
+      className={`${collapsed ? "w-16" : "w-64"} transition-all duration-300 bg-sidebar border-r border-sidebar-border`}
+      collapsible="icon"
+    >
+      <SidebarHeader className="p-4 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
           {!collapsed && (
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-primary-foreground" />
+              <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center">
+                <DollarSign className="w-5 h-5 text-sidebar-primary-foreground" />
               </div>
               <div>
-                <h2 className="text-xs font-bold text-foreground">Accounting System</h2>
+                <h2 className="text-xs font-bold text-sidebar-foreground">ລະບົບບັນຊີ</h2>
               </div>
             </div>
           )}
@@ -92,7 +95,7 @@ export function AppSidebar() {
             variant="ghost"
             size="sm"
             onClick={toggleSidebar}
-            className="hover:bg-primary-light/20"
+            className="hover:bg-sidebar-accent hidden md:flex"
           >
             <ChevronLeft className={`w-4 h-4 transition-transform ${collapsed ? "rotate-180" : ""}`} />
           </Button>
@@ -101,8 +104,8 @@ export function AppSidebar() {
 
       <SidebarContent className="p-2" onKeyDown={handleKeyDown}>
         <SidebarGroup>
-          <SidebarGroupLabel className={`${collapsed ? "hidden" : ""} text-muted-foreground font-medium`}>
-            Main Modules
+          <SidebarGroupLabel className={`${collapsed ? "hidden" : ""} text-sidebar-foreground/70 font-medium`}>
+            ໂມດູນຫຼັກ
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
@@ -114,7 +117,7 @@ export function AppSidebar() {
                       to={item.url} 
                       end 
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary ${getNavClass({ isActive })}`
+                        `flex items-center space-x-3 px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
                       }
                       tabIndex={0}
                       onFocus={() => setFocusedIndex(index)}
@@ -130,8 +133,8 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup className="mt-8">
-          <SidebarGroupLabel className={`${collapsed ? "hidden" : ""} text-muted-foreground font-medium`}>
-            System
+          <SidebarGroupLabel className={`${collapsed ? "hidden" : ""} text-sidebar-foreground/70 font-medium`}>
+            ລະບົບ
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
@@ -144,7 +147,7 @@ export function AppSidebar() {
                         ref={(el) => (menuRefs.current[globalIndex] = el)}
                         to={item.url} 
                         className={({ isActive }) => 
-                          `flex items-center space-x-3 px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary ${getNavClass({ isActive })}`
+                          `flex items-center space-x-3 px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
                         }
                         tabIndex={0}
                         onFocus={() => setFocusedIndex(globalIndex)}
