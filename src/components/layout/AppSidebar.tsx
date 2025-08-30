@@ -117,7 +117,7 @@ export function AppSidebar() {
                       to={item.url} 
                       end 
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
+                        `flex items-center ${collapsed ? 'justify-center' : 'space-x-3'} px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
                       }
                       tabIndex={0}
                       onFocus={() => setFocusedIndex(index)}
@@ -143,18 +143,18 @@ export function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <NavLink 
-                        ref={(el) => (menuRefs.current[globalIndex] = el)}
-                        to={item.url} 
-                        className={({ isActive }) => 
-                          `flex items-center space-x-3 px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
-                        }
-                        tabIndex={0}
-                        onFocus={() => setFocusedIndex(globalIndex)}
-                      >
-                        <item.icon className="w-5 h-5 flex-shrink-0" />
-                        {!collapsed && <span className="font-medium">{item.title}</span>}
-                      </NavLink>
+                       <NavLink 
+                         ref={(el) => (menuRefs.current[globalIndex] = el)}
+                         to={item.url} 
+                         className={({ isActive }) => 
+                           `flex items-center ${collapsed ? 'justify-center' : 'space-x-3'} px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
+                         }
+                         tabIndex={0}
+                         onFocus={() => setFocusedIndex(globalIndex)}
+                       >
+                         <item.icon className="w-5 h-5 flex-shrink-0" />
+                         {!collapsed && <span className="font-medium">{item.title}</span>}
+                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
