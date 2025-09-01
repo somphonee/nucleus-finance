@@ -2,6 +2,7 @@ import { Bell, Search, User, LogOut, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,25 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function TopBar() {
   const { language, setLanguage } = useLanguage();
+  const { user, logout } = useAuth();
+
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case 'admin': return 'bg-destructive text-destructive-foreground';
+      case 'userprovince': return 'bg-warning text-warning-foreground';
+      case 'user': return 'bg-secondary text-secondary-foreground';
+      default: return 'bg-secondary text-secondary-foreground';
+    }
+  };
+
+  const getUserInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  };
   
   return (
     <header className="h-16 bg-card border-b border-card-border px-6 flex items-center justify-between">
@@ -91,16 +111,23 @@ export function TopBar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-primary-light/20">
               <Avatar className="h-10 w-10">
-                <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
-                <AvatarFallback className="bg-primary text-primary-foreground">AD</AvatarFallback>
+                <AvatarImage src="/placeholder-avatar.jpg" alt={user?.name} />
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  {user ? getUserInitials(user.name) : 'U'}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 bg-card border-card-border" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Admin User</p>
-                <p className="text-xs leading-none text-muted-foreground">admin@nucleusfin.com</p>
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium leading-none">{user?.name}</p>
+                  <Badge className={`text-xs px-2 py-1 ${getRoleColor(user?.role || '')}`}>
+                    {user?.role?.toUpperCase()}
+                  </Badge>
+                </div>
+                <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -112,7 +139,10 @@ export function TopBar() {
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="hover:bg-destructive/10 text-destructive">
+            <DropdownMenuItem 
+              className="hover:bg-destructive/10 text-destructive cursor-pointer"
+              onClick={logout}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
