@@ -8,7 +8,8 @@ import {
   BarChart3,
   Home,
   Settings,
-  ChevronLeft
+  ChevronLeft,
+  UserCog
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -37,6 +38,7 @@ const navigationItems = [
 ];
 
 const systemItems = [
+  { title: "User Management", url: "/user-management", icon: UserCog },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 

@@ -14,6 +14,7 @@ import SharesTracking from "./pages/SharesTracking";
 import LoanManagement from "./pages/LoanManagement";
 import GeneralLedger from "./pages/GeneralLedger";
 import Reports from "./pages/Reports";
+import UserManagement from "./pages/UserManagement";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -40,6 +41,11 @@ const App = () => (
                       <Route path="/loan-management" element={<LoanManagement />} />
                       <Route path="/general-ledger" element={<GeneralLedger />} />
                       <Route path="/reports" element={<Reports />} />
+                      <Route path="/user-management" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                          <UserManagement />
+                        </ProtectedRoute>
+                      } />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>
