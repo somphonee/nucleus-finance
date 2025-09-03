@@ -39,8 +39,8 @@ const navigationItems = [
 ];
 
 const systemItems = [
-  { title: "User Management", url: "/user-management", icon: UserCog },
-  { title: "Settings", url: "/settings", icon: Settings },
+  { title: "nav.userManagement", url: "/user-management", icon: UserCog },
+  { title: "nav.settings", url: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -165,7 +165,7 @@ export function AppSidebar() {
                          onFocus={() => setFocusedIndex(globalIndex)}
                        >
                          <item.icon className="w-5 h-5 flex-shrink-0" />
-                         {!collapsed && <span className="font-medium">{item.title}</span>}
+                         {!collapsed && <span className="font-medium">{t(item.title)}</span>}
                        </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

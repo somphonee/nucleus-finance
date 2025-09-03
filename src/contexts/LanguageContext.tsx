@@ -18,6 +18,8 @@ const translations = {
     'nav.loanManagement': 'Loan Management',
     'nav.generalLedger': 'General Ledger',
     'nav.reports': 'Reports & Analytics',
+    'nav.userManagement': 'User Management',
+    'nav.settings': 'Settings',
     
     // Dashboard
     'dashboard.title': 'Financial Dashboard',
@@ -109,6 +111,8 @@ const translations = {
     'nav.loanManagement': 'ການຈັດການກູ້ຢຶມ',
     'nav.generalLedger': 'ບັນຊີລາຍການທົ່ວໄປ',
     'nav.reports': 'ລາຍງານ ແລະ ການວິເຄາະ',
+    'nav.userManagement': 'ການຈັດການຜູ້ໃຊ້',
+    'nav.settings': 'ຕັ້ງຄ່າ',
     
     // Dashboard
     'dashboard.title': 'ໜ້າຫຼັກການເງິນ',
