@@ -92,7 +92,7 @@ export function AppSidebar() {
       collapsible="icon"
     >
       <SidebarHeader className="p-4 border-b border-sidebar-border">
-        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
+        <div className="flex items-center justify-between">
           {!collapsed && (
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center">
@@ -103,16 +103,11 @@ export function AppSidebar() {
               </div>
             </div>
           )}
-          {collapsed && (
-            <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-sidebar-primary-foreground" />
-            </div>
-          )}
           <Button
             variant="ghost"
             size="sm"
             onClick={toggleSidebar}
-            className={`hover:bg-sidebar-accent ${collapsed ? 'w-8 h-8 p-0' : ''} hidden md:flex`}
+            className="hover:bg-sidebar-accent hidden md:flex"
           >
             <ChevronLeft className={`w-4 h-4 transition-transform ${collapsed ? "rotate-180" : ""}`} />
           </Button>
@@ -129,20 +124,19 @@ export function AppSidebar() {
               {navigationItems.map((item, index) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                     <NavLink 
-                       ref={(el) => (menuRefs.current[index] = el)}
-                       to={item.url} 
-                       end 
-                       className={({ isActive }) => 
-                         `flex items-center ${collapsed ? 'justify-center px-2 py-3' : 'space-x-3 px-3 py-2'} rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
-                       }
-                       tabIndex={0}
-                       onFocus={() => setFocusedIndex(index)}
-                       title={collapsed ? t(item.title) : undefined}
-                     >
-                       <item.icon className="w-5 h-5 flex-shrink-0" />
-                       {!collapsed && <span className="font-medium">{t(item.title)}</span>}
-                     </NavLink>
+                    <NavLink 
+                      ref={(el) => (menuRefs.current[index] = el)}
+                      to={item.url} 
+                      end 
+                      className={({ isActive }) => 
+                        `flex items-center ${collapsed ? 'justify-center' : 'space-x-3'} px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
+                      }
+                      tabIndex={0}
+                      onFocus={() => setFocusedIndex(index)}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      {!collapsed && <span className="font-medium">{t(item.title)}</span>}
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -161,19 +155,18 @@ export function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                        <NavLink 
-                          ref={(el) => (menuRefs.current[globalIndex] = el)}
-                          to={item.url} 
-                          className={({ isActive }) => 
-                            `flex items-center ${collapsed ? 'justify-center px-2 py-3' : 'space-x-3 px-3 py-2'} rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
-                          }
-                          tabIndex={0}
-                          onFocus={() => setFocusedIndex(globalIndex)}
-                          title={collapsed ? t(item.title) : undefined}
-                        >
-                          <item.icon className="w-5 h-5 flex-shrink-0" />
-                          {!collapsed && <span className="font-medium">{t(item.title)}</span>}
-                        </NavLink>
+                       <NavLink 
+                         ref={(el) => (menuRefs.current[globalIndex] = el)}
+                         to={item.url} 
+                         className={({ isActive }) => 
+                           `flex items-center ${collapsed ? 'justify-center' : 'space-x-3'} px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
+                         }
+                         tabIndex={0}
+                         onFocus={() => setFocusedIndex(globalIndex)}
+                       >
+                         <item.icon className="w-5 h-5 flex-shrink-0" />
+                         {!collapsed && <span className="font-medium">{t(item.title)}</span>}
+                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
