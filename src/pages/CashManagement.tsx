@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Plus, Download, Filter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { AddTransactionDialog } from "@/components/dialogs/AddTransactionDialog";
 
 interface CashTransaction {
   id: string;
@@ -58,6 +60,8 @@ const mockTransactions: CashTransaction[] = [
 ];
 
 const CashManagement = () => {
+  const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -123,7 +127,10 @@ const CashManagement = () => {
               <Download className="w-4 h-4" />
               Export
             </Button>
-            <Button className="flex items-center gap-2">
+            <Button 
+              className="flex items-center gap-2"
+              onClick={() => setIsTransactionDialogOpen(true)}
+            >
               <Plus className="w-4 h-4" />
               Add Transaction
             </Button>
@@ -190,6 +197,11 @@ const CashManagement = () => {
             <p className="text-2xl font-bold text-primary">₭265,000</p>
           </div>
         </div>
+
+        <AddTransactionDialog 
+          open={isTransactionDialogOpen}
+          onOpenChange={setIsTransactionDialogOpen}
+        />
       </div>
   );
 };

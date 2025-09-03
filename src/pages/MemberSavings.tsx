@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Plus, Download, Search, Eye, Edit, DollarSign, Users, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { MetricCard } from "@/components/dashboard/MetricCard";
+import { AddMemberDialog } from "@/components/dialogs/AddMemberDialog";
 
 interface Member {
   id: string;
@@ -59,6 +61,8 @@ const mockMembers: Member[] = [
 ];
 
 const MemberSavings = () => {
+  const [isMemberDialogOpen, setIsMemberDialogOpen] = useState(false);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency', 
@@ -141,7 +145,10 @@ const MemberSavings = () => {
               <Download className="w-4 h-4" />
               Export Report
             </Button>
-            <Button className="flex items-center gap-2">
+            <Button 
+              className="flex items-center gap-2"
+              onClick={() => setIsMemberDialogOpen(true)}
+            >
               <Plus className="w-4 h-4" />
               Add Member
             </Button>
@@ -235,6 +242,11 @@ const MemberSavings = () => {
             </div>
           </div>
         </div>
+
+        <AddMemberDialog 
+          open={isMemberDialogOpen}
+          onOpenChange={setIsMemberDialogOpen}
+        />
       </div>
   );
 };
