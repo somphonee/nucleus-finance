@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Sidebar,
   SidebarContent,
@@ -48,8 +49,17 @@ export function AppSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const menuRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  // Filter system items based on user role
+  const filteredSystemItems = systemItems.filter(item => {
+    if (item.url === "/user-management") {
+      return user?.role === "admin";
+    }
+    return true;
+  });
 
   const isActive = (path: string) => currentPath === path;
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
@@ -58,7 +68,7 @@ export function AppSidebar() {
       : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors";
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    const allItems = [...navigationItems, ...systemItems];
+    const allItems = [...navigationItems, ...filteredSystemItems];
     
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -140,7 +150,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
-              {systemItems.map((item, index) => {
+              {filteredSystemItems.map((item, index) => {
                 const globalIndex = navigationItems.length + index;
                 return (
                   <SidebarMenuItem key={item.title}>
