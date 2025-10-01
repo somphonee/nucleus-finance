@@ -17,6 +17,15 @@ import Reports from "./pages/Reports";
 import UserManagement from "./pages/UserManagement";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+// Province accounting pages
+import Cashbook from "./pages/Cashbook";
+import Bankbook from "./pages/Bankbook";
+import CardTransactions from "./pages/CardTransactions";
+import DailyLedger from "./pages/DailyLedger";
+import ClassifiedAccounts from "./pages/ClassifiedAccounts";
+import TrialBalance from "./pages/TrialBalance";
+import IncomeStatement from "./pages/IncomeStatement";
+import FinancialReport from "./pages/FinancialReport";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +53,47 @@ const App = () => (
                       <Route path="/user-management" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                           <UserManagement />
+                        </ProtectedRoute>
+                      } />
+                      {/* Province accounting routes */}
+                      <Route path="/cashbook" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <Cashbook />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/bankbook" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <Bankbook />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/card-transactions" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <CardTransactions />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/daily-ledger" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <DailyLedger />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/classified-accounts" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <ClassifiedAccounts />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/trial-balance" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <TrialBalance />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/income-statement" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <IncomeStatement />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/financial-report" element={
+                        <ProtectedRoute allowedRoles={['userprovince']}>
+                          <FinancialReport />
                         </ProtectedRoute>
                       } />
                       <Route path="*" element={<NotFound />} />

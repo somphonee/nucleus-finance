@@ -9,7 +9,15 @@ import {
   Home,
   Settings,
   ChevronLeft,
-  UserCog
+  UserCog,
+  Wallet,
+  Building2,
+  CreditCard as CardIcon,
+  BookOpen,
+  FolderTree,
+  Scale,
+  TrendingUp,
+  FileBarChart
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -38,6 +46,18 @@ const navigationItems = [
   { title: "nav.reports", url: "/reports", icon: BarChart3 },
 ];
 
+// Province-specific accounting modules
+const provinceAccountingItems = [
+  { title: "nav.cashbook", url: "/cashbook", icon: Wallet },
+  { title: "nav.bankbook", url: "/bankbook", icon: Building2 },
+  { title: "nav.cardTransactions", url: "/card-transactions", icon: CardIcon },
+  { title: "nav.dailyLedger", url: "/daily-ledger", icon: BookOpen },
+  { title: "nav.classifiedAccounts", url: "/classified-accounts", icon: FolderTree },
+  { title: "nav.trialBalance", url: "/trial-balance", icon: Scale },
+  { title: "nav.incomeStatement", url: "/income-statement", icon: TrendingUp },
+  { title: "nav.financialReport", url: "/financial-report", icon: FileBarChart },
+];
+
 const systemItems = [
   { title: "nav.userManagement", url: "/user-management", icon: UserCog },
   { title: "nav.settings", url: "/settings", icon: Settings },
@@ -52,6 +72,11 @@ export function AppSidebar() {
   const { user } = useAuth();
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const menuRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  // Filter menu items based on user role
+  const displayedNavigationItems = user?.role === "userprovince" 
+    ? provinceAccountingItems 
+    : navigationItems;
 
   // Filter system items based on user role
   const filteredSystemItems = systemItems.filter(item => {
@@ -68,7 +93,7 @@ export function AppSidebar() {
       : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors";
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    const allItems = [...navigationItems, ...filteredSystemItems];
+    const allItems = [...displayedNavigationItems, ...filteredSystemItems];
     
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -117,11 +142,11 @@ export function AppSidebar() {
       <SidebarContent className="p-2" onKeyDown={handleKeyDown}>
         <SidebarGroup>
           <SidebarGroupLabel className={`${collapsed ? "hidden" : ""} text-sidebar-foreground/70 font-medium`}>
-            ໂມດູນຫຼັກ
+            {user?.role === "userprovince" ? "ບັນຊີແຂວງ" : "ໂມດູນຫຼັກ"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
-              {navigationItems.map((item, index) => (
+              {displayedNavigationItems.map((item, index) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -151,7 +176,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {filteredSystemItems.map((item, index) => {
-                const globalIndex = navigationItems.length + index;
+                const globalIndex = displayedNavigationItems.length + index;
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
