@@ -1,12 +1,17 @@
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Download, Printer } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function IncomeStatement() {
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // Province data would be added here for filtering
 
   const revenueItems = [
     { code: "4011", name: "ລາຍໄດ້ຈາກການຂາຍ", amount: 25000000 },

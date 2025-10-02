@@ -1,11 +1,16 @@
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Download, Printer } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function TrialBalance() {
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // Province data would be added here for filtering
 
   const accounts = [
     { code: "1011", name: "ເງິນສົດ", debit: 6500000, credit: 0 },

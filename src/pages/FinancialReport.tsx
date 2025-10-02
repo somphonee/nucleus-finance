@@ -1,3 +1,4 @@
+import React, { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -5,9 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Download, Printer, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function FinancialReport() {
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // Province data would be added here for filtering
 
   const assets = [
     { category: "ຊັບສິນຫມູນວຽນ", items: [
@@ -291,6 +296,3 @@ export default function FinancialReport() {
     </div>
   );
 }
-
-// Add this import at the top if not already present
-import React from "react";

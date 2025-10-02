@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,18 +8,34 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Download, Plus, Search, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Cashbook() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDate, setFilterDate] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState("all");
 
-  // Mock data
-  const transactions = [
+  // Mock data - includes multiple provinces
+  const allTransactions = [
     { id: 1, date: "2025-01-15", description: "ຮັບເງິນຈາກສະມາຊິກ", income: 5000000, expense: 0, balance: 5000000, province: "ວຽງຈັນ" },
     { id: 2, date: "2025-01-16", description: "ຈ່າຍຄ່າໃຊ້ຈ່າຍສຳນັກງານ", income: 0, expense: 500000, balance: 4500000, province: "ວຽງຈັນ" },
     { id: 3, date: "2025-01-17", description: "ຮັບເງິນຄືນເງິນກູ້", income: 2000000, expense: 0, balance: 6500000, province: "ວຽງຈັນ" },
+    { id: 4, date: "2025-01-15", description: "ຮັບເງິນຈາກສະມາຊິກ", income: 3000000, expense: 0, balance: 3000000, province: "ຫຼວງພະບາງ" },
+    { id: 5, date: "2025-01-16", description: "ຈ່າຍຄ່າໃຊ້ຈ່າຍ", income: 0, expense: 300000, balance: 2700000, province: "ຫຼວງພະບາງ" },
   ];
+
+  // Filter transactions based on user role
+  const transactions = useMemo(() => {
+    if (user?.role === 'userprovince' && user?.province) {
+      return allTransactions.filter(t => t.province === user.province);
+    }
+    if (selectedProvince !== 'all') {
+      return allTransactions.filter(t => t.province === selectedProvince);
+    }
+    return allTransactions;
+  }, [user, selectedProvince]);
 
   const handleExport = () => {
     toast({
@@ -147,16 +163,23 @@ export default function Cashbook() {
                 onChange={(e) => setFilterDate(e.target.value)}
                 className="w-auto"
               />
-              <Select>
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="ເລືອກແຂວງ" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">ທັງໝົດ</SelectItem>
-                  <SelectItem value="vientiane">ວຽງຈັນ</SelectItem>
-                  <SelectItem value="luangprabang">ຫຼວງພະບາງ</SelectItem>
-                </SelectContent>
-              </Select>
+              {user?.role === 'admin' && (
+                <Select value={selectedProvince} onValueChange={setSelectedProvince}>
+                  <SelectTrigger className="w-[150px]">
+                    <SelectValue placeholder="ເລືອກແຂວງ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">ທັງໝົດ</SelectItem>
+                    <SelectItem value="ວຽງຈັນ">ວຽງຈັນ</SelectItem>
+                    <SelectItem value="ຫຼວງພະບາງ">ຫຼວງພະບາງ</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+              {user?.role === 'userprovince' && user?.province && (
+                <div className="px-4 py-2 bg-muted rounded-md text-sm font-medium">
+                  {user.province}
+                </div>
+              )}
             </div>
           </div>
 

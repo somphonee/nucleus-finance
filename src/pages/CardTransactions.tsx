@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,17 +6,31 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Download, Search, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function CardTransactions() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState("all");
 
-  const cardTransactions = [
-    { id: 1, date: "2025-01-15", cardNo: "**** 1234", cardType: "Debit", merchant: "ຮ້ານອາຫານ", amount: 150000, status: "success" },
-    { id: 2, date: "2025-01-16", cardNo: "**** 5678", cardType: "Credit", merchant: "ຮ້ານຂາຍເຄື່ອງ", amount: 500000, status: "success" },
-    { id: 3, date: "2025-01-17", cardNo: "**** 1234", cardType: "Debit", merchant: "ປໍ້ານ້ຳມັນ", amount: 300000, status: "pending" },
-    { id: 4, date: "2025-01-18", cardNo: "**** 5678", cardType: "Credit", merchant: "ສຸບເປີມາເກັດ", amount: 800000, status: "success" },
+  const allTransactions = [
+    { id: 1, date: "2025-01-15", cardNo: "**** 1234", cardType: "Debit", merchant: "ຮ້ານອາຫານ", amount: 150000, status: "success", province: "ວຽງຈັນ" },
+    { id: 2, date: "2025-01-16", cardNo: "**** 5678", cardType: "Credit", merchant: "ຮ້ານຂາຍເຄື່ອງ", amount: 500000, status: "success", province: "ວຽງຈັນ" },
+    { id: 3, date: "2025-01-17", cardNo: "**** 1234", cardType: "Debit", merchant: "ປໍ້ານ້ຳມັນ", amount: 300000, status: "pending", province: "ວຽງຈັນ" },
+    { id: 4, date: "2025-01-18", cardNo: "**** 5678", cardType: "Credit", merchant: "ສຸບເປີມາເກັດ", amount: 800000, status: "success", province: "ວຽງຈັນ" },
+    { id: 5, date: "2025-01-15", cardNo: "**** 9012", cardType: "Debit", merchant: "ຮ້ານກາເຟ", amount: 100000, status: "success", province: "ຫຼວງພະບາງ" },
   ];
+
+  const cardTransactions = useMemo(() => {
+    if (user?.role === 'userprovince' && user?.province) {
+      return allTransactions.filter(t => t.province === user.province);
+    }
+    if (selectedProvince !== 'all') {
+      return allTransactions.filter(t => t.province === selectedProvince);
+    }
+    return allTransactions;
+  }, [user, selectedProvince]);
 
   return (
     <div className="space-y-6">

@@ -1,18 +1,33 @@
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Download, Printer } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function DailyLedger() {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const [selectedProvince, setSelectedProvince] = useState("all");
 
-  const dailyEntries = [
-    { id: 1, accountCode: "1011", accountName: "ເງິນສົດ", debit: 5000000, credit: 0, balance: 5000000 },
-    { id: 2, accountCode: "1021", accountName: "ທະນາຄານ BCEL", debit: 10000000, credit: 0, balance: 10000000 },
-    { id: 3, accountCode: "2011", accountName: "ເງິນກູ້ຢືມ", debit: 0, credit: 3000000, balance: 3000000 },
-    { id: 4, accountCode: "3011", accountName: "ທຶນຈົດທະບຽນ", debit: 0, credit: 12000000, balance: 12000000 },
+  const allEntries = [
+    { id: 1, accountCode: "1011", accountName: "ເງິນສົດ", debit: 5000000, credit: 0, balance: 5000000, province: "ວຽງຈັນ" },
+    { id: 2, accountCode: "1021", accountName: "ທະນາຄານ BCEL", debit: 10000000, credit: 0, balance: 10000000, province: "ວຽງຈັນ" },
+    { id: 3, accountCode: "2011", accountName: "ເງິນກູ້ຢືມ", debit: 0, credit: 3000000, balance: 3000000, province: "ວຽງຈັນ" },
+    { id: 4, accountCode: "3011", accountName: "ທຶນຈົດທະບຽນ", debit: 0, credit: 12000000, balance: 12000000, province: "ວຽງຈັນ" },
+    { id: 5, accountCode: "1011", accountName: "ເງິນສົດ", debit: 3000000, credit: 0, balance: 3000000, province: "ຫຼວງພະບາງ" },
   ];
+
+  const dailyEntries = useMemo(() => {
+    if (user?.role === 'userprovince' && user?.province) {
+      return allEntries.filter(e => e.province === user.province);
+    }
+    if (selectedProvince !== 'all') {
+      return allEntries.filter(e => e.province === selectedProvince);
+    }
+    return allEntries;
+  }, [user, selectedProvince]);
 
   const totalDebit = dailyEntries.reduce((sum, entry) => sum + entry.debit, 0);
   const totalCredit = dailyEntries.reduce((sum, entry) => sum + entry.credit, 0);

@@ -20,6 +20,14 @@ const translations = {
     'nav.reports': 'Reports & Analytics',
     'nav.userManagement': 'User Management',
     'nav.settings': 'Settings',
+    'nav.cashbook': 'Cashbook',
+    'nav.bankbook': 'Bankbook',
+    'nav.cardTransactions': 'Card Transactions',
+    'nav.dailyLedger': 'Daily Ledger',
+    'nav.classifiedAccounts': 'Classified Accounts 1011',
+    'nav.trialBalance': 'Trial Balance',
+    'nav.incomeStatement': 'Income Statement',
+    'nav.financialReport': 'Financial Report',
     
     // Dashboard
     'dashboard.title': 'Financial Dashboard',
@@ -113,6 +121,14 @@ const translations = {
     'nav.reports': 'ລາຍງານ ແລະ ການວິເຄາະ',
     'nav.userManagement': 'ການຈັດການຜູ້ໃຊ້',
     'nav.settings': 'ຕັ້ງຄ່າ',
+    'nav.cashbook': 'ປື້ມບັນຊີເງິນສົດ',
+    'nav.bankbook': 'ປື້ມບັນຊີທະນາຄານ',
+    'nav.cardTransactions': 'ບັດຜ່ານ',
+    'nav.dailyLedger': 'ປື້ມບັນຊີປະຈຳວັນ',
+    'nav.classifiedAccounts': 'ບັນຊີແຍກປະເພດ1011',
+    'nav.trialBalance': 'ໃບດຸ່ນດ່ຽງ',
+    'nav.incomeStatement': 'ໃບແຈ້ງຜົນໄດ້ຮັບ',
+    'nav.financialReport': 'ໃບລາຍງານຖານະການເງິນ',
     
     // Dashboard
     'dashboard.title': 'ໜ້າຫຼັກການເງິນ',

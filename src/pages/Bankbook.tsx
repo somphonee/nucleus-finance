@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,16 +9,30 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Download, Plus, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Bankbook() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState("all");
 
-  const bankTransactions = [
-    { id: 1, date: "2025-01-15", bank: "BCEL", accountNo: "001-234-567", description: "ຝາກເງິນ", debit: 10000000, credit: 0, balance: 10000000, status: "completed" },
-    { id: 2, date: "2025-01-16", bank: "BCEL", accountNo: "001-234-567", description: "ໂອນເງິນ", debit: 0, credit: 2000000, balance: 8000000, status: "completed" },
-    { id: 3, date: "2025-01-17", bank: "BCEL", accountNo: "001-234-567", description: "ຖອນເງິນ", debit: 0, credit: 1000000, balance: 7000000, status: "pending" },
+  const allTransactions = [
+    { id: 1, date: "2025-01-15", bank: "BCEL", accountNo: "001-234-567", description: "ຝາກເງິນ", debit: 10000000, credit: 0, balance: 10000000, status: "completed", province: "ວຽງຈັນ" },
+    { id: 2, date: "2025-01-16", bank: "BCEL", accountNo: "001-234-567", description: "ໂອນເງິນ", debit: 0, credit: 2000000, balance: 8000000, status: "completed", province: "ວຽງຈັນ" },
+    { id: 3, date: "2025-01-17", bank: "BCEL", accountNo: "001-234-567", description: "ຖອນເງິນ", debit: 0, credit: 1000000, balance: 7000000, status: "pending", province: "ວຽງຈັນ" },
+    { id: 4, date: "2025-01-15", bank: "LDB", accountNo: "002-345-678", description: "ຝາກເງິນ", debit: 5000000, credit: 0, balance: 5000000, status: "completed", province: "ຫຼວງພະບາງ" },
   ];
+
+  const bankTransactions = useMemo(() => {
+    if (user?.role === 'userprovince' && user?.province) {
+      return allTransactions.filter(t => t.province === user.province);
+    }
+    if (selectedProvince !== 'all') {
+      return allTransactions.filter(t => t.province === selectedProvince);
+    }
+    return allTransactions;
+  }, [user, selectedProvince]);
 
   return (
     <div className="space-y-6">

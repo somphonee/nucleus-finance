@@ -1,12 +1,18 @@
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ClassifiedAccounts() {
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // Province data would be added here for filtering
+  // For now, all users see the same data (admin sees all, userprovince sees their province)
 
   const assetAccounts = [
     { code: "1011", name: "ເງິນສົດ", balance: 6500000, type: "ດີບິດ" },

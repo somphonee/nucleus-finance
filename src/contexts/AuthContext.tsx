@@ -7,6 +7,7 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  province?: string;
 }
 
 interface AuthContextType {
@@ -44,7 +45,8 @@ const mockUsers: User[] = [
     id: '3',
     email: 'userprovince@company.com',
     name: 'Province User',
-    role: 'userprovince'
+    role: 'userprovince',
+    province: 'ວຽງຈັນ'
   }
 ];
 
