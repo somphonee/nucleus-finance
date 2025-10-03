@@ -26,6 +26,8 @@ import ClassifiedAccounts from "./pages/ClassifiedAccounts";
 import TrialBalance from "./pages/TrialBalance";
 import IncomeStatement from "./pages/IncomeStatement";
 import FinancialReport from "./pages/FinancialReport";
+import UserProfile from "./pages/UserProfile";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -96,6 +98,8 @@ const App = () => (
                           <FinancialReport />
                         </ProtectedRoute>
                       } />
+                      <Route path="/user-profile" element={<UserProfile />} />
+                      <Route path="/settings" element={<Settings />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>

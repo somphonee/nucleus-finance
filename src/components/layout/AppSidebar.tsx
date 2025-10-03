@@ -10,6 +10,7 @@ import {
   Settings,
   ChevronLeft,
   UserCog,
+  User,
   Wallet,
   Building2,
   CreditCard as CardIcon,
@@ -60,6 +61,7 @@ const provinceAccountingItems = [
 
 const systemItems = [
   { title: "nav.userManagement", url: "/user-management", icon: UserCog },
+  { title: "nav.userProfile", url: "/user-profile", icon: User },
   { title: "nav.settings", url: "/settings", icon: Settings },
 ];
 
