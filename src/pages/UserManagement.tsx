@@ -11,6 +11,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Plus, Edit, Trash2, Search, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { UserRole } from "@/contexts/AuthContext";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface User {
   id: string;
@@ -20,7 +22,27 @@ interface User {
   status: 'active' | 'inactive';
   createdAt: string;
   lastLogin?: string;
+  allowedMenus?: string[];
 }
+
+// Available menu options
+const MENU_OPTIONS = [
+  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'cash-management', label: 'Cash Management' },
+  { id: 'member-savings', label: 'Member Savings' },
+  { id: 'shares-tracking', label: 'Shares Tracking' },
+  { id: 'loan-management', label: 'Loan Management' },
+  { id: 'general-ledger', label: 'General Ledger' },
+  { id: 'reports', label: 'Reports' },
+  { id: 'cashbook', label: 'Cashbook' },
+  { id: 'bankbook', label: 'Bankbook' },
+  { id: 'card-transactions', label: 'Card Transactions' },
+  { id: 'daily-ledger', label: 'Daily Ledger' },
+  { id: 'classified-accounts', label: 'Classified Accounts' },
+  { id: 'trial-balance', label: 'Trial Balance' },
+  { id: 'income-statement', label: 'Income Statement' },
+  { id: 'financial-report', label: 'Financial Report' },
+];
 
 const initialUsers: User[] = [
   {
@@ -71,7 +93,8 @@ export default function UserManagement() {
     name: "",
     email: "",
     role: "user" as UserRole,
-    status: "active" as "active" | "inactive"
+    status: "active" as "active" | "inactive",
+    allowedMenus: [] as string[]
   });
   const { toast } = useToast();
 
@@ -89,12 +112,13 @@ export default function UserManagement() {
       email: formData.email,
       role: formData.role,
       status: formData.status,
-      createdAt: new Date().toISOString().split('T')[0]
+      createdAt: new Date().toISOString().split('T')[0],
+      allowedMenus: formData.allowedMenus
     };
 
     setUsers([...users, newUser]);
     setIsAddDialogOpen(false);
-    setFormData({ name: "", email: "", role: "user", status: "active" });
+    setFormData({ name: "", email: "", role: "user", status: "active", allowedMenus: [] });
     toast({
       title: "User Added",
       description: `${newUser.name} has been added successfully.`
@@ -106,14 +130,14 @@ export default function UserManagement() {
 
     const updatedUsers = users.map(user =>
       user.id === editingUser.id
-        ? { ...user, name: formData.name, email: formData.email, role: formData.role, status: formData.status }
+        ? { ...user, name: formData.name, email: formData.email, role: formData.role, status: formData.status, allowedMenus: formData.allowedMenus }
         : user
     );
 
     setUsers(updatedUsers);
     setIsEditDialogOpen(false);
     setEditingUser(null);
-    setFormData({ name: "", email: "", role: "user", status: "active" });
+    setFormData({ name: "", email: "", role: "user", status: "active", allowedMenus: [] });
     toast({
       title: "User Updated",
       description: "User information has been updated successfully."
@@ -135,9 +159,27 @@ export default function UserManagement() {
       name: user.name,
       email: user.email,
       role: user.role,
-      status: user.status
+      status: user.status,
+      allowedMenus: user.allowedMenus || []
     });
     setIsEditDialogOpen(true);
+  };
+
+  const handleMenuToggle = (menuId: string) => {
+    const currentMenus = formData.allowedMenus;
+    const updatedMenus = currentMenus.includes(menuId)
+      ? currentMenus.filter(id => id !== menuId)
+      : [...currentMenus, menuId];
+    setFormData({ ...formData, allowedMenus: updatedMenus });
+  };
+
+  const handleSelectAllMenus = () => {
+    const allMenuIds = MENU_OPTIONS.map(m => m.id);
+    setFormData({ ...formData, allowedMenus: allMenuIds });
+  };
+
+  const handleDeselectAllMenus = () => {
+    setFormData({ ...formData, allowedMenus: [] });
   };
 
   const getRoleBadgeVariant = (role: UserRole) => {
@@ -222,6 +264,39 @@ export default function UserManagement() {
                     <SelectItem value="inactive">Inactive</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="grid gap-2">
+                <div className="flex items-center justify-between">
+                  <Label>Menu Permissions</Label>
+                  <div className="flex gap-2">
+                    <Button type="button" variant="link" size="sm" onClick={handleSelectAllMenus}>
+                      Select All
+                    </Button>
+                    <Button type="button" variant="link" size="sm" onClick={handleDeselectAllMenus}>
+                      Deselect All
+                    </Button>
+                  </div>
+                </div>
+                <ScrollArea className="h-48 border rounded-md p-3">
+                  <div className="space-y-2">
+                    {MENU_OPTIONS.map((menu) => (
+                      <div key={menu.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`add-menu-${menu.id}`}
+                          checked={formData.allowedMenus.includes(menu.id)}
+                          onCheckedChange={() => handleMenuToggle(menu.id)}
+                        />
+                        <label
+                          htmlFor={`add-menu-${menu.id}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                        >
+                          {menu.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
               </div>
             </div>
             
@@ -396,6 +471,39 @@ export default function UserManagement() {
                   <SelectItem value="inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between">
+                <Label>Menu Permissions</Label>
+                <div className="flex gap-2">
+                  <Button type="button" variant="link" size="sm" onClick={handleSelectAllMenus}>
+                    Select All
+                  </Button>
+                  <Button type="button" variant="link" size="sm" onClick={handleDeselectAllMenus}>
+                    Deselect All
+                  </Button>
+                </div>
+              </div>
+              <ScrollArea className="h-48 border rounded-md p-3">
+                <div className="space-y-2">
+                  {MENU_OPTIONS.map((menu) => (
+                    <div key={menu.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`edit-menu-${menu.id}`}
+                        checked={formData.allowedMenus.includes(menu.id)}
+                        onCheckedChange={() => handleMenuToggle(menu.id)}
+                      />
+                      <label
+                        htmlFor={`edit-menu-${menu.id}`}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                      >
+                        {menu.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           </div>
           
