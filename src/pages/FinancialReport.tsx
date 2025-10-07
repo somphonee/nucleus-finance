@@ -57,13 +57,13 @@ export default function FinancialReport() {
   const totalLiabilitiesAndEquity = totalLiabilities + totalEquity;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">ໃບລາຍງານຖານະການເງິນ</h1>
-        <p className="text-muted-foreground mt-2">ລາຍງານງົບການເງິນສົມບູນ</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">ໃບລາຍງານຖານະການເງິນ</h1>
+        <p className="text-muted-foreground mt-2 text-sm sm:text-base">ລາຍງານງົບການເງິນສົມບູນ</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">ຊັບສິນທັງໝົດ</CardTitle>
@@ -98,14 +98,14 @@ export default function FinancialReport() {
 
       <Card>
         <CardHeader>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
             <div>
-              <CardTitle>ງົບດຸ່ນການເງິນ</CardTitle>
-              <CardDescription>ວັນທີ: {new Date().toLocaleDateString('lo-LA')}</CardDescription>
+              <CardTitle className="text-lg sm:text-xl">ງົບດຸ່ນການເງິນ</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">ວັນທີ: {new Date().toLocaleDateString('lo-LA')}</CardDescription>
             </div>
             <div className="flex gap-2 flex-wrap">
               <Select defaultValue="current">
-                <SelectTrigger className="w-[150px]">
+                <SelectTrigger className="w-full sm:w-[150px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -115,17 +115,17 @@ export default function FinancialReport() {
                   <SelectItem value="yearly">ລາຍປີ</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" className="gap-2" onClick={() => {
+              <Button variant="outline" size="sm" className="gap-1 sm:gap-2 flex-1 sm:flex-none" onClick={() => {
                 toast({ title: "ກຳລັງພິມ", description: "ກຳລັງພິມລາຍງານການເງິນ..." });
               }}>
-                <Printer className="h-4 w-4" />
-                ພິມ
+                <Printer className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="text-xs sm:text-sm">ພິມ</span>
               </Button>
-              <Button variant="outline" className="gap-2" onClick={() => {
+              <Button variant="outline" size="sm" className="gap-1 sm:gap-2 flex-1 sm:flex-none" onClick={() => {
                 toast({ title: "ກຳລັງສົ່ງອອກ", description: "ກຳລັງສົ່ງອອກເປັນ PDF/Excel..." });
               }}>
-                <Download className="h-4 w-4" />
-                ສົ່ງອອກ PDF/Excel
+                <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="text-xs sm:text-sm">ສົ່ງອອກ</span>
               </Button>
             </div>
           </div>

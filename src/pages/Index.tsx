@@ -6,23 +6,23 @@ import { FinancialChart } from "@/components/charts/FinancialChart";
 
 const Index = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
         {/* Page Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Dashboard</h1>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">
               Overview of your financial data and key metrics
             </p>
           </div>
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <Calendar className="w-4 h-4" />
+          <div className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground">
+            <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
             <span>Last updated: {new Date().toLocaleDateString()}</span>
           </div>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           <MetricCard
             title="Total Cash Balance"
             value="₭2,450,000"
@@ -59,7 +59,7 @@ const Index = () => {
         </div>
 
         {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <FinancialChart 
             type="line" 
             title="Monthly Income vs Expenses" 
@@ -73,7 +73,7 @@ const Index = () => {
         </div>
 
         {/* Data Tables and Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="lg:col-span-2">
             <RecentTransactions />
           </div>
@@ -83,7 +83,7 @@ const Index = () => {
         </div>
 
         {/* Additional Charts */}
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6">
           <FinancialChart 
             type="bar" 
             title="Yearly Financial Overview" 

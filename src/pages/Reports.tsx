@@ -64,27 +64,27 @@ export default function Reports() {
   const yearlyNet = yearlyIncome - yearlyExpenses;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">{t('reports.title')}</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{t('reports.title')}</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
             Comprehensive financial reports and analytics
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Export PDF
+            <Download className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Export PDF</span>
           </Button>
           <Button variant="outline" size="sm">
-            <FileText className="h-4 w-4 mr-2" />
-            Export Excel
+            <FileText className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Export Excel</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Yearly {t('ledger.income')}</CardTitle>
@@ -147,16 +147,16 @@ export default function Reports() {
       </div>
 
       <Tabs defaultValue="charts" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="charts">Charts & Analytics</TabsTrigger>
-          <TabsTrigger value="monthly-income">{t('reports.monthlyIncome')}</TabsTrigger>
-          <TabsTrigger value="yearly-income">{t('reports.yearlyIncome')}</TabsTrigger>
-          <TabsTrigger value="monthly-expenses">{t('reports.monthlyExpenses')}</TabsTrigger>
-          <TabsTrigger value="yearly-expenses">{t('reports.yearlyExpenses')}</TabsTrigger>
+        <TabsList className="w-full sm:w-auto grid grid-cols-2 sm:grid-cols-5 h-auto">
+          <TabsTrigger value="charts" className="text-xs sm:text-sm">Charts</TabsTrigger>
+          <TabsTrigger value="monthly-income" className="text-xs sm:text-sm">Monthly Inc.</TabsTrigger>
+          <TabsTrigger value="yearly-income" className="text-xs sm:text-sm">Yearly Inc.</TabsTrigger>
+          <TabsTrigger value="monthly-expenses" className="text-xs sm:text-sm">Monthly Exp.</TabsTrigger>
+          <TabsTrigger value="yearly-expenses" className="text-xs sm:text-sm">Yearly Exp.</TabsTrigger>
         </TabsList>
         
         <TabsContent value="charts" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 md:grid-cols-2">
             <Card>
               <CardHeader>
                 <CardTitle>{t('reports.incomeVsExpenses')}</CardTitle>
@@ -164,8 +164,8 @@ export default function Reports() {
                   Monthly comparison of income and expenses
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+              <CardContent className="p-2 sm:p-6">
+                <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={monthlyData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
@@ -185,8 +185,8 @@ export default function Reports() {
                   Income sources distribution
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+              <CardContent className="p-2 sm:p-6">
+                <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie
                       data={incomeCategories}
@@ -214,8 +214,8 @@ export default function Reports() {
                   Monthly net profit over time
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+              <CardContent className="p-2 sm:p-6">
+                <ResponsiveContainer width="100%" height={250}>
                   <LineChart data={monthlyData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
@@ -234,8 +234,8 @@ export default function Reports() {
                   Expense categories distribution
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+              <CardContent className="p-2 sm:p-6">
+                <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie
                       data={expenseCategories}
@@ -259,13 +259,13 @@ export default function Reports() {
         </TabsContent>
 
         <TabsContent value="monthly-income" className="space-y-4">
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <span>Select Month:</span>
+              <span className="text-sm sm:text-base">Select Month:</span>
             </div>
             <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-full sm:w-48">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -286,7 +286,7 @@ export default function Reports() {
                 Income breakdown by category for the selected month
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -330,7 +330,7 @@ export default function Reports() {
                 Annual income summary by category
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -369,13 +369,13 @@ export default function Reports() {
         </TabsContent>
 
         <TabsContent value="monthly-expenses" className="space-y-4">
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <span>Select Month:</span>
+              <span className="text-sm sm:text-base">Select Month:</span>
             </div>
             <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-full sm:w-48">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -396,7 +396,7 @@ export default function Reports() {
                 Expense breakdown by category for the selected month
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>

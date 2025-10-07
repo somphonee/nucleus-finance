@@ -195,11 +195,11 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">User Management</h1>
-          <p className="text-muted-foreground">Manage system users and their roles</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">User Management</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">Manage system users and their roles</p>
         </div>
         
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
@@ -319,8 +319,8 @@ export default function UserManagement() {
             Manage user accounts, roles, and permissions
           </CardDescription>
           
-          <div className="flex gap-4 mt-4">
-            <div className="relative flex-1 max-w-sm">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
+            <div className="relative flex-1 sm:max-w-sm">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search users..."
@@ -331,7 +331,7 @@ export default function UserManagement() {
             </div>
             
             <Select value={selectedRole} onValueChange={setSelectedRole}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-full sm:w-48">
                 <SelectValue placeholder="Filter by role" />
               </SelectTrigger>
               <SelectContent>
@@ -344,7 +344,7 @@ export default function UserManagement() {
           </div>
         </CardHeader>
         
-        <CardContent>
+        <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -375,7 +375,7 @@ export default function UserManagement() {
                   <TableCell>{user.createdAt}</TableCell>
                   <TableCell>{user.lastLogin || 'Never'}</TableCell>
                   <TableCell className="text-right">
-                    <div className="flex gap-2 justify-end">
+                    <div className="flex gap-1 sm:gap-2 justify-end">
                       <Button
                         variant="outline"
                         size="sm"
