@@ -18,7 +18,10 @@ import {
   FolderTree,
   Scale,
   TrendingUp,
-  FileBarChart
+  FileBarChart,
+  Tags,
+  MapPin,
+  FileSearch
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -60,7 +63,10 @@ const provinceAccountingItems = [
 ];
 
 const systemItems = [
-  { title: "nav.userManagement", url: "/user-management", icon: UserCog },
+  { title: "nav.userManagement", url: "/user-management", icon: UserCog, adminOnly: true },
+  { title: "nav.categories", url: "/categories", icon: Tags, adminOnly: true },
+  { title: "nav.organizations", url: "/organizations", icon: MapPin, adminOnly: true },
+  { title: "nav.auditLogs", url: "/audit-logs", icon: FileSearch, adminOnly: true },
   { title: "nav.userProfile", url: "/user-profile", icon: User },
   { title: "nav.settings", url: "/settings", icon: Settings },
 ];
@@ -82,7 +88,7 @@ export function AppSidebar() {
 
   // Filter system items based on user role
   const filteredSystemItems = systemItems.filter(item => {
-    if (item.url === "/user-management") {
+    if ('adminOnly' in item && item.adminOnly) {
       return user?.role === "admin";
     }
     return true;

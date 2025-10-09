@@ -29,6 +29,9 @@ const translations = {
     'nav.incomeStatement': 'Income Statement',
     'nav.financialReport': 'Financial Report',
     'nav.userProfile': 'User Profile',
+    'nav.categories': 'Categories',
+    'nav.organizations': 'Organizations',
+    'nav.auditLogs': 'Audit Logs',
     
     // Dashboard
     'dashboard.title': 'Financial Dashboard',
@@ -178,6 +181,9 @@ const translations = {
     'nav.incomeStatement': 'ໃບແຈ້ງຜົນໄດ້ຮັບ',
     'nav.financialReport': 'ໃບລາຍງານຖານະການເງິນ',
     'nav.userProfile': 'ໂປຣໄຟລ່ຜູ້ໃຊ້',
+    'nav.categories': 'ປະເພດລາຍຮັບ-ລາຍຈ່າຍ',
+    'nav.organizations': 'ອົງກອນ ແລະ ແຂວງ',
+    'nav.auditLogs': 'ບັນທຶກການກວດສອບ',
     
     // Dashboard
     'dashboard.title': 'ໜ້າຫຼັກການເງິນ',

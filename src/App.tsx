@@ -28,6 +28,9 @@ import IncomeStatement from "./pages/IncomeStatement";
 import FinancialReport from "./pages/FinancialReport";
 import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
+import Categories from "./pages/Categories";
+import Organizations from "./pages/Organizations";
+import AuditLogs from "./pages/AuditLogs";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +103,21 @@ const App = () => (
                       } />
                       <Route path="/user-profile" element={<UserProfile />} />
                       <Route path="/settings" element={<Settings />} />
+                      <Route path="/categories" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                          <Categories />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/organizations" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                          <Organizations />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/audit-logs" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                          <AuditLogs />
+                        </ProtectedRoute>
+                      } />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>
