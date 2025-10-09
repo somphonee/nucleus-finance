@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -12,15 +13,24 @@ import { Bell, Lock, Globe, Moon, Mail, Shield } from "lucide-react";
 export default function Settings() {
   const { t, language, setLanguage } = useLanguage();
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
 
   const [settings, setSettings] = useState({
     emailNotifications: true,
     pushNotifications: false,
     twoFactorAuth: false,
-    darkMode: false,
     autoSave: true,
     sessionTimeout: "30",
   });
+
+  useEffect(() => {
+    // Sync theme with settings
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
 
   const handleSave = () => {
     toast({
@@ -200,10 +210,14 @@ export default function Settings() {
               </div>
               <Switch
                 id="dark-mode"
-                checked={settings.darkMode}
-                onCheckedChange={(checked) =>
-                  setSettings({ ...settings, darkMode: checked })
-                }
+                checked={theme === "dark"}
+                onCheckedChange={(checked) => {
+                  setTheme(checked ? "dark" : "light");
+                  toast({
+                    title: t("success"),
+                    description: checked ? "Dark mode enabled" : "Light mode enabled",
+                  });
+                }}
               />
             </div>
 

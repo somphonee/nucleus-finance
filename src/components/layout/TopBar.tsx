@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function TopBar() {
   const { language, setLanguage } = useLanguage();
@@ -51,6 +52,9 @@ export function TopBar() {
       </div>
 
       <div className="flex items-center space-x-4">
+        {/* Theme Toggle */}
+        <ThemeToggle />
+        
         {/* Language Selector */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
