@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,12 +15,19 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
 
-  // Redirect if already authenticated
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
+  // Redirect based on user role
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'userprovince') {
+        navigate('/cashbook', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
