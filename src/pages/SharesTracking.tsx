@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Download, PieChart } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 interface ShareContribution {
   id: string;
@@ -47,6 +48,8 @@ export default function SharesTracking() {
   });
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleAddContribution = () => {
     if (newContribution.memberId && newContribution.memberName && newContribution.amount && newContribution.date) {
@@ -90,6 +93,13 @@ export default function SharesTracking() {
     
     return Object.values(memberTotals);
   };
+
+  // Pagination calculations
+  const totalPages = Math.ceil(contributions.length / itemsPerPage);
+  const paginatedContributions = contributions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="space-y-6">
@@ -267,7 +277,7 @@ export default function SharesTracking() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {contributions.map((contribution) => (
+              {paginatedContributions.map((contribution) => (
                 <TableRow key={contribution.id}>
                   <TableCell>{new Date(contribution.date).toLocaleDateString()}</TableCell>
                   <TableCell className="font-medium">{contribution.memberId}</TableCell>
@@ -280,6 +290,38 @@ export default function SharesTracking() {
               ))}
             </TableBody>
           </Table>
+          
+          {totalPages > 1 && (
+            <div className="mt-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  {[...Array(totalPages)].map((_, i) => (
+                    <PaginationItem key={i}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(i + 1)}
+                        isActive={currentPage === i + 1}
+                        className="cursor-pointer"
+                      >
+                        {i + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
