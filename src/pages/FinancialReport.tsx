@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Download, Printer, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { FinancialChart } from "@/components/charts/FinancialChart";
 
 export default function FinancialReport() {
   const { toast } = useToast();
@@ -132,9 +133,10 @@ export default function FinancialReport() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="balance-sheet" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="balance-sheet">ງົບດຸ່ນ</TabsTrigger>
               <TabsTrigger value="summary">ສະຫຼຸບ</TabsTrigger>
+              <TabsTrigger value="charts">ກາຟຟິກ</TabsTrigger>
             </TabsList>
 
             <TabsContent value="balance-sheet" className="space-y-6 mt-6">
@@ -289,6 +291,28 @@ export default function FinancialReport() {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="charts" className="space-y-6 mt-6">
+              <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+                <FinancialChart 
+                  type="pie" 
+                  title="ສະຫຼຸບຊັບສິນ (Assets Breakdown)"
+                  height={300}
+                />
+                <FinancialChart 
+                  type="bar" 
+                  title="ໜີ້ສິນ ແລະ ທຶນ (Liabilities & Equity)"
+                  height={300}
+                />
+              </div>
+              <div className="grid gap-6 grid-cols-1">
+                <FinancialChart 
+                  type="line" 
+                  title="ແນວໂນ້ມການເງິນ (Financial Trend)"
+                  height={350}
+                />
+              </div>
             </TabsContent>
           </Tabs>
         </CardContent>
