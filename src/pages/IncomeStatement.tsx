@@ -3,13 +3,52 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, Printer } from "lucide-react";
+import { Download, Printer, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { exportToPDF } from "@/lib/pdfExport";
 
 export default function IncomeStatement() {
   const { toast } = useToast();
   const { user } = useAuth();
+  const { language } = useLanguage();
+
+  // Check if user has permission to export PDF
+  const canExportPDF = user?.role === 'admin' || user?.role === 'userprovince';
+
+  const handleExportPDF = () => {
+    if (!canExportPDF) {
+      toast({ 
+        title: language === 'lo' ? "ບໍ່ໄດ້ຮັບອະນຸຍາດ" : "Unauthorized", 
+        description: language === 'lo' ? "ທ່ານບໍ່ມີສິດໃນການສົ່ງອອກ PDF" : "You don't have permission to export PDF",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const pdfData = [
+      ...revenueItems.map(item => ({ ...item, type: language === 'lo' ? 'ລາຍຮັບ' : 'Revenue' })),
+      ...costItems.map(item => ({ ...item, type: language === 'lo' ? 'ຕົ້ນທຶນ' : 'Cost' })),
+      ...expenseItems.map(item => ({ ...item, type: language === 'lo' ? 'ຄ່າໃຊ້ຈ່າຍ' : 'Expenses' }))
+    ];
+
+    exportToPDF({
+      filename: `income-statement-${new Date().toISOString().split('T')[0]}`,
+      title: language === 'lo' ? 'ໃບແຈ້ງຜົນໄດ້ຮັບ' : 'Income Statement',
+      language,
+      data: pdfData,
+      columns: ['code', 'name', 'amount', 'type'],
+      headers: language === 'lo' 
+        ? ['ລະຫັດ', 'ລາຍການ', 'ຈຳນວນເງິນ', 'ປະເພດ']
+        : ['Code', 'Description', 'Amount', 'Type']
+    });
+
+    toast({ 
+      title: language === 'lo' ? "ສຳເລັດ" : "Success", 
+      description: language === 'lo' ? "ສົ່ງອອກ PDF ສຳເລັດແລ້ວ" : "PDF exported successfully"
+    });
+  };
 
   // Province data would be added here for filtering
 
@@ -115,11 +154,14 @@ export default function IncomeStatement() {
                 <Printer className="h-4 w-4" />
                 ພິມ
               </Button>
-              <Button variant="outline" className="gap-2" onClick={() => {
-                toast({ title: "ກຳລັງສົ່ງອອກ", description: "ກຳລັງສົ່ງອອກເປັນ PDF/Excel..." });
-              }}>
-                <Download className="h-4 w-4" />
-                ສົ່ງອອກ
+              <Button 
+                variant="outline" 
+                className="gap-2" 
+                onClick={handleExportPDF}
+                disabled={!canExportPDF}
+              >
+                <FileText className="h-4 w-4" />
+                {language === 'lo' ? 'ສົ່ງອອກ PDF' : 'Export PDF'}
               </Button>
             </div>
           </div>

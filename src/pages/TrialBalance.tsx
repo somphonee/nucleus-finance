@@ -2,13 +2,46 @@ import { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, Printer } from "lucide-react";
+import { Download, Printer, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { exportToPDF } from "@/lib/pdfExport";
 
 export default function TrialBalance() {
   const { toast } = useToast();
   const { user } = useAuth();
+  const { language } = useLanguage();
+
+  // Check if user has permission to export PDF
+  const canExportPDF = user?.role === 'admin' || user?.role === 'userprovince';
+
+  const handleExportPDF = () => {
+    if (!canExportPDF) {
+      toast({ 
+        title: language === 'lo' ? "ບໍ່ໄດ້ຮັບອະນຸຍາດ" : "Unauthorized", 
+        description: language === 'lo' ? "ທ່ານບໍ່ມີສິດໃນການສົ່ງອອກ PDF" : "You don't have permission to export PDF",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    exportToPDF({
+      filename: `trial-balance-${new Date().toISOString().split('T')[0]}`,
+      title: language === 'lo' ? 'ໃບດຸ່ນດ່ຽງ' : 'Trial Balance',
+      language,
+      data: accounts,
+      columns: ['code', 'name', 'debit', 'credit'],
+      headers: language === 'lo' 
+        ? ['ລະຫັດບັນຊີ', 'ຊື່ບັນຊີ', 'ດີບິດ', 'ເຄຣດິດ']
+        : ['Account Code', 'Account Name', 'Debit', 'Credit']
+    });
+
+    toast({ 
+      title: language === 'lo' ? "ສຳເລັດ" : "Success", 
+      description: language === 'lo' ? "ສົ່ງອອກ PDF ສຳເລັດແລ້ວ" : "PDF exported successfully"
+    });
+  };
 
   // Province data would be added here for filtering
 
@@ -90,11 +123,14 @@ export default function TrialBalance() {
                 <Printer className="h-4 w-4" />
                 ພິມ
               </Button>
-              <Button variant="outline" className="gap-2" onClick={() => {
-                toast({ title: "ກຳລັງສົ່ງອອກ", description: "ກຳລັງສົ່ງອອກຂໍ້ມູນເປັນໄຟລ໌ Excel..." });
-              }}>
-                <Download className="h-4 w-4" />
-                ສົ່ງອອກ PDF/Excel
+              <Button 
+                variant="outline" 
+                className="gap-2" 
+                onClick={handleExportPDF}
+                disabled={!canExportPDF}
+              >
+                <FileText className="h-4 w-4" />
+                {language === 'lo' ? 'ສົ່ງອອກ PDF' : 'Export PDF'}
               </Button>
             </div>
           </div>
