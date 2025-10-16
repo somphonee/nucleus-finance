@@ -15,7 +15,6 @@ export default function ClassifiedAccounts() {
   // For now, all users see the same data (admin sees all, userprovince sees their province)
 
   const assetAccounts = [
-    { code: "1011", name: "ເງິນສົດ", balance: 6500000, type: "ດີບິດ" },
     { code: "1021", name: "ທະນາຄານ BCEL", balance: 7000000, type: "ດີບິດ" },
     { code: "1022", name: "ທະນາຄານ LDB", balance: 5000000, type: "ດີບິດ" },
     { code: "1031", name: "ລູກໜີ້ການຄ້າ", balance: 3000000, type: "ດີບິດ" },
@@ -75,7 +74,7 @@ export default function ClassifiedAccounts() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">ບັນຊີແຍກປະເພດ 1011</h1>
+        <h1 className="text-3xl font-bold text-foreground">ບັນຊີແຍກປະເພດ</h1>
         <p className="text-muted-foreground mt-2">ຈັດປະເພດ ແລະ ຈັດການບັນຊີຕາມປະເພດ</p>
       </div>
 
