@@ -31,6 +31,7 @@ import Settings from "./pages/Settings";
 import Categories from "./pages/Categories";
 import Organizations from "./pages/Organizations";
 import AuditLogs from "./pages/AuditLogs";
+import CooperativeRegistration from "./pages/CooperativeRegistration";
 
 const queryClient = new QueryClient();
 
@@ -116,6 +117,11 @@ const App = () => (
                       <Route path="/audit-logs" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                           <AuditLogs />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/cooperative-registration" element={
+                        <ProtectedRoute allowedRoles={['admin', 'userprovince']}>
+                          <CooperativeRegistration />
                         </ProtectedRoute>
                       } />
                       <Route path="*" element={<NotFound />} />

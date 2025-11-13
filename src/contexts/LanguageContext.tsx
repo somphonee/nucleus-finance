@@ -32,6 +32,7 @@ const translations = {
     'nav.categories': 'Categories',
     'nav.organizations': 'Organizations',
     'nav.auditLogs': 'Audit Logs',
+    'nav.cooperativeRegistration': 'Cooperative Registration',
     
     // Dashboard
     'dashboard.title': 'Financial Dashboard',
@@ -113,6 +114,30 @@ const translations = {
     'Reset to Default': 'Reset to Default',
     'Save Settings': 'Save Settings',
     
+    // Cooperative Registration
+    'cooperative.registration': 'Cooperative Registration',
+    'cooperative.subtitle': 'Register and manage cooperative certificates',
+    'cooperative.exportCertificate': 'Export Certificate',
+    'cooperative.basicInfo': 'Basic Information',
+    'cooperative.basicInfoDesc': 'Enter cooperative registration details',
+    'cooperative.licenseNumber': 'License Number',
+    'cooperative.registrationDate': 'Registration Date',
+    'cooperative.cooperativeNameLao': 'Cooperative Name (Lao)',
+    'cooperative.cooperativeNameEnglish': 'Cooperative Name (English)',
+    'cooperative.cooperativeType': 'Cooperative Type',
+    'cooperative.chairmanName': 'Chairman Name',
+    'cooperative.chairmanNationality': 'Chairman Nationality',
+    'cooperative.chairmanPhoto': 'Chairman Photo',
+    'cooperative.photoPreview': 'Photo Preview',
+    'cooperative.registeredCapital': 'Registered Capital',
+    'cooperative.capitalInWords': 'Capital in Words',
+    'cooperative.taxId': 'Tax ID',
+    'cooperative.numberOfMembers': 'Number of Members',
+    'cooperative.supervisingAuthority': 'Supervising Authority',
+    'cooperative.issuanceLocation': 'Issuance Location',
+    'cooperative.officeAddress': 'Office Address',
+    'cooperative.cooperativePurpose': 'Cooperative Purpose',
+    
     // Cash Management
     'cash.title': 'Cash Management',
     'cash.addTransaction': 'Add Cash Transaction',
@@ -184,6 +209,7 @@ const translations = {
     'nav.categories': 'ປະເພດລາຍຮັບ-ລາຍຈ່າຍ',
     'nav.organizations': 'ອົງກອນ ແລະ ແຂວງ',
     'nav.auditLogs': 'ບັນທຶກການກວດສອບ',
+    'nav.cooperativeRegistration': 'ລົງທະບຽນສະຫະກອນ',
     
     // Dashboard
     'dashboard.title': 'ໜ້າຫຼັກການເງິນ',
@@ -264,6 +290,30 @@ const translations = {
     'Automatically save changes': 'ບັນທຶກການປ່ຽນແປງອັດຕະໂນມັດ',
     'Reset to Default': 'ຣີເຊັດເປັນຄ່າເລີ່ມຕົ້ນ',
     'Save Settings': 'ບັນທຶກການຕັ້ງຄ່າ',
+    
+    // Cooperative Registration
+    'cooperative.registration': 'ລົງທະບຽນສະຫະກອນ',
+    'cooperative.subtitle': 'ລົງທະບຽນ ແລະ ຈັດການໃບທະບຽນສະຫະກອນ',
+    'cooperative.exportCertificate': 'ສົ່ງອອກໃບທະບຽນ',
+    'cooperative.basicInfo': 'ຂໍ້ມູນພື້ນຖານ',
+    'cooperative.basicInfoDesc': 'ປ້ອນລາຍລະອຽດການລົງທະບຽນສະຫະກອນ',
+    'cooperative.licenseNumber': 'ເລກທີໃບທະບຽນ',
+    'cooperative.registrationDate': 'ວັນທີລົງທະບຽນ',
+    'cooperative.cooperativeNameLao': 'ຊື່ສະຫະກອນ (ລາວ)',
+    'cooperative.cooperativeNameEnglish': 'ຊື່ສະຫະກອນ (ອັງກິດ)',
+    'cooperative.cooperativeType': 'ປະເພດສະຫະກອນ',
+    'cooperative.chairmanName': 'ຊື່ປະທານ',
+    'cooperative.chairmanNationality': 'ສັນຊາດປະທານ',
+    'cooperative.chairmanPhoto': 'ຮູບປະທານ',
+    'cooperative.photoPreview': 'ເບິ່ງຮູບລ່ວງໜ້າ',
+    'cooperative.registeredCapital': 'ທຶນຈົດທະບຽນ',
+    'cooperative.capitalInWords': 'ທຶນເປັນຕົວອັກສອນ',
+    'cooperative.taxId': 'ເລກປະຈຳຕົວຜູ້ເສຍອາກອນ',
+    'cooperative.numberOfMembers': 'ຈຳນວນສະມາຊິກ',
+    'cooperative.supervisingAuthority': 'ອົງການຄຸ້ມຄອງ',
+    'cooperative.issuanceLocation': 'ສະຖານທີ່ອອກໃບ',
+    'cooperative.officeAddress': 'ທີ່ຕັ້ງສຳນັກງານ',
+    'cooperative.cooperativePurpose': 'ຈຸດປະສົງສະຫະກອນ',
     
     // Cash Management
     'cash.title': 'ການຈັດການເງິນສົດ',
