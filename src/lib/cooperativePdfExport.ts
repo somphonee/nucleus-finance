@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import emblemImage from '@/assets/emblem-of-laos.png';
 import watermarkImage from '@/assets/watermark.jpg';
+import '@fontsource/noto-sans-lao';
 
 interface CooperativeData {
   licenseNumber: string;
@@ -62,9 +63,9 @@ export const exportCooperativeCertificate = async (
     console.error('Failed to load emblem:', error);
   }
 
-  // Header text
+  // Header text - use system fonts for better Lao support
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
+  doc.setFontSize(14);
   doc.text(
     language === 'lo' 
       ? 'ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ'
@@ -74,13 +75,13 @@ export const exportCooperativeCertificate = async (
     { align: 'center' }
   );
 
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.text(
     language === 'lo'
       ? 'ສັນຕິພາບ ເອກະລາດ ປະຊາທິປະໄຕ ເອກະພາບ ວັດທະນະຖາວອນ'
       : 'Peace, Independence, Democracy, Unity and Prosperity',
     pageWidth / 2,
-    56,
+    58,
     { align: 'center' }
   );
 

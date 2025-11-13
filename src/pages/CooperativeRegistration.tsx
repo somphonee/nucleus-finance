@@ -1,11 +1,7 @@
-import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { FileText, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { exportCooperativeCertificate } from "@/lib/cooperativePdfExport";
@@ -55,28 +51,12 @@ export default function CooperativeRegistration() {
   const { t, language } = useLanguage();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [formData, setFormData] = useState<CooperativeData>(mockData);
-  const [chairmanPhoto, setChairmanPhoto] = useState<string | null>(null);
 
   const canManageCooperatives = user?.role === 'admin' || user?.role === 'userprovince';
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setChairmanPhoto(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleExportCertificate = async () => {
     try {
-      await exportCooperativeCertificate({
-        ...formData,
-        chairmanPhoto: chairmanPhoto || undefined
-      }, language);
+      await exportCooperativeCertificate(mockData, language);
       
       toast({
         title: language === 'lo' ? 'ສຳເລັດ' : 'Success',
@@ -133,142 +113,45 @@ export default function CooperativeRegistration() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="w-5 h-5" />
-            {t('cooperative.basicInfo')}
+            {t('cooperative.certificatePreview')}
           </CardTitle>
-          <CardDescription>{t('cooperative.basicInfoDesc')}</CardDescription>
+          <CardDescription>{t('cooperative.certificatePreviewDesc')}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>{t('cooperative.licenseNumber')}</Label>
-              <Input 
-                value={formData.licenseNumber}
-                onChange={(e) => setFormData({ ...formData, licenseNumber: e.target.value })}
-              />
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="font-semibold">{t('cooperative.licenseNumber')}:</span>
+              <span className="ml-2">{mockData.licenseNumber}</span>
             </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.registrationDate')}</Label>
-              <Input 
-                type="date"
-                value={formData.registrationDate}
-                onChange={(e) => setFormData({ ...formData, registrationDate: e.target.value })}
-              />
+            <div>
+              <span className="font-semibold">{t('cooperative.registrationDate')}:</span>
+              <span className="ml-2">{mockData.registrationDate}</span>
             </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.cooperativeNameLao')}</Label>
-              <Input 
-                value={formData.cooperativeNameLao}
-                onChange={(e) => setFormData({ ...formData, cooperativeNameLao: e.target.value })}
-              />
+            <div className="md:col-span-2">
+              <span className="font-semibold">{t('cooperative.cooperativeNameLao')}:</span>
+              <span className="ml-2">{mockData.cooperativeNameLao}</span>
             </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.cooperativeNameEnglish')}</Label>
-              <Input 
-                value={formData.cooperativeNameEnglish}
-                onChange={(e) => setFormData({ ...formData, cooperativeNameEnglish: e.target.value })}
-              />
+            <div className="md:col-span-2">
+              <span className="font-semibold">{t('cooperative.cooperativeNameEnglish')}:</span>
+              <span className="ml-2">{mockData.cooperativeNameEnglish}</span>
             </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.cooperativeType')}</Label>
-              <Input 
-                value={formData.cooperativeType}
-                onChange={(e) => setFormData({ ...formData, cooperativeType: e.target.value })}
-              />
+            <div>
+              <span className="font-semibold">{t('cooperative.cooperativeType')}:</span>
+              <span className="ml-2">{mockData.cooperativeType}</span>
             </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.chairmanName')}</Label>
-              <Input 
-                value={formData.chairmanName}
-                onChange={(e) => setFormData({ ...formData, chairmanName: e.target.value })}
-              />
+            <div>
+              <span className="font-semibold">{t('cooperative.chairmanName')}:</span>
+              <span className="ml-2">{mockData.chairmanName}</span>
             </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.chairmanNationality')}</Label>
-              <Input 
-                value={formData.chairmanNationality}
-                onChange={(e) => setFormData({ ...formData, chairmanNationality: e.target.value })}
-              />
+            <div>
+              <span className="font-semibold">{t('cooperative.registeredCapital')}:</span>
+              <span className="ml-2">{mockData.registeredCapital.toLocaleString()} Kip</span>
             </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.chairmanPhoto')}</Label>
-              <Input 
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoUpload}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.registeredCapital')}</Label>
-              <Input 
-                type="number"
-                value={formData.registeredCapital}
-                onChange={(e) => setFormData({ ...formData, registeredCapital: parseFloat(e.target.value) })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.capitalInWords')}</Label>
-              <Input 
-                value={formData.capitalInWords}
-                onChange={(e) => setFormData({ ...formData, capitalInWords: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.taxId')}</Label>
-              <Input 
-                value={formData.taxId}
-                onChange={(e) => setFormData({ ...formData, taxId: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.numberOfMembers')}</Label>
-              <Input 
-                type="number"
-                value={formData.numberOfMembers}
-                onChange={(e) => setFormData({ ...formData, numberOfMembers: parseInt(e.target.value) })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.supervisingAuthority')}</Label>
-              <Input 
-                value={formData.supervisingAuthority}
-                onChange={(e) => setFormData({ ...formData, supervisingAuthority: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t('cooperative.issuanceLocation')}</Label>
-              <Input 
-                value={formData.issuanceLocation}
-                onChange={(e) => setFormData({ ...formData, issuanceLocation: e.target.value })}
-              />
+            <div>
+              <span className="font-semibold">{t('cooperative.numberOfMembers')}:</span>
+              <span className="ml-2">{mockData.numberOfMembers}</span>
             </div>
           </div>
-
-          <div className="space-y-2">
-            <Label>{t('cooperative.officeAddress')}</Label>
-            <Textarea 
-              value={formData.officeAddress}
-              onChange={(e) => setFormData({ ...formData, officeAddress: e.target.value })}
-              rows={2}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t('cooperative.cooperativePurpose')}</Label>
-            <Textarea 
-              value={formData.cooperativePurpose}
-              onChange={(e) => setFormData({ ...formData, cooperativePurpose: e.target.value })}
-              rows={3}
-            />
-          </div>
-
-          {chairmanPhoto && (
-            <div className="space-y-2">
-              <Label>{t('cooperative.photoPreview')}</Label>
-              <div className="w-32 h-32 border rounded-lg overflow-hidden">
-                <img src={chairmanPhoto} alt="Chairman" className="w-full h-full object-cover" />
-              </div>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>
