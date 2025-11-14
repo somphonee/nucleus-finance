@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { FileText, Download } from "lucide-react";
+import { FileText, Download, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { exportCooperativeCertificate } from "@/lib/cooperativePdfExport";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useState } from "react";
 
 interface CooperativeData {
   licenseNumber: string;
@@ -52,12 +53,14 @@ const formSchema = z.object({
   numberOfMembers: z.number().min(1, "Number of members is required"),
   cooperativePurpose: z.string().min(1, "Purpose is required"),
   supervisingAuthority: z.string().min(1, "Supervising authority is required"),
+  chairmanPhoto: z.string().optional(),
 });
 
 export default function CooperativeRegistration() {
   const { t, language } = useLanguage();
   const { user } = useAuth();
   const { toast } = useToast();
+  const [photoPreview, setPhotoPreview] = useState<string>("");
 
   const canManageCooperatives = user?.role === 'admin' || user?.role === 'userprovince';
 
@@ -81,8 +84,31 @@ export default function CooperativeRegistration() {
       numberOfMembers: 0,
       cooperativePurpose: "",
       supervisingAuthority: "",
+      chairmanPhoto: "",
     },
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: language === 'lo' ? 'ຜິດພາດ' : 'Error',
+          description: language === 'lo' ? 'ກະລຸນາເລືອກໄຟລ໌ຮູບພາບ' : 'Please select an image file',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setPhotoPreview(result);
+        form.setValue('chairmanPhoto', result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleExportCertificate = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -387,6 +413,39 @@ export default function CooperativeRegistration() {
                       <FormLabel>{t('cooperative.issuanceDate')}</FormLabel>
                       <FormControl>
                         <Input {...field} type="date" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="chairmanPhoto"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>{t('cooperative.chairmanPhoto')}</FormLabel>
+                      <FormControl>
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-4">
+                            <Input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleFileChange}
+                              className="cursor-pointer"
+                            />
+                            <Upload className="w-5 h-5 text-muted-foreground" />
+                          </div>
+                          {photoPreview && (
+                            <div className="flex items-center gap-4">
+                              <img 
+                                src={photoPreview} 
+                                alt="Chairman preview" 
+                                className="w-32 h-32 object-cover rounded-md border border-border"
+                              />
+                            </div>
+                          )}
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
