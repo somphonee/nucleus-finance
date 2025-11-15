@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useState } from "react";
+import { certificatesAPI, CertificateData } from "@/lib/api/certificates";
 
 interface CooperativeData {
   licenseNumber: string;
@@ -61,6 +62,7 @@ export default function CooperativeRegistration() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [photoPreview, setPhotoPreview] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const canManageCooperatives = user?.role === 'admin' || user?.role === 'userprovince';
 
@@ -454,9 +456,12 @@ export default function CooperativeRegistration() {
               </div>
 
               <div className="flex justify-end pt-4">
-                <Button type="submit" className="gap-2">
+                <Button type="submit" className="gap-2" disabled={isSubmitting}>
                   <Download className="w-4 h-4" />
-                  {t('cooperative.generateCertificate')}
+                  {isSubmitting 
+                    ? (language === 'lo' ? 'ກຳລັງປະມວນຜົນ...' : 'Processing...') 
+                    : t('cooperative.generateCertificate')
+                  }
                 </Button>
               </div>
             </CardContent>
