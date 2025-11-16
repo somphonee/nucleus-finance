@@ -11,6 +11,9 @@ export * from './savings';
 export * from './shares';
 export * from './loans';
 export * from './reports';
+export * from './users';
+export * from './categories';
+export * from './journals';
 
 // Re-export all API instances for easy access
 export { authAPI } from './auth';
@@ -25,3 +28,6 @@ export { savingsAPI } from './savings';
 export { sharesAPI } from './shares';
 export { loansAPI } from './loans';
 export { reportsAPI } from './reports';
+export { usersAPI } from './users';
+export { categoriesAPI } from './categories';
+export { journalsAPI } from './journals';

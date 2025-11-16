@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { authAPI } from '@/lib/api';
 
 export type UserRole = 'admin' | 'user' | 'userprovince';
 
@@ -27,63 +28,54 @@ export const useAuth = () => {
   return context;
 };
 
-// Mock users for demonstration
-const mockUsers: User[] = [
-  {
-    id: '1',
-    email: 'admin@company.com',
-    name: 'Admin User',
-    role: 'admin'
-  },
-  {
-    id: '2',
-    email: 'user@company.com',
-    name: 'Regular User',
-    role: 'user'
-  },
-  {
-    id: '3',
-    email: 'userprovince@company.com',
-    name: 'Province User',
-    role: 'userprovince',
-    province: 'ວຽງຈັນ'
-  }
-];
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Mock authentication - any password works
-    const foundUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-    
-    if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem('mockUser', JSON.stringify(foundUser));
-      return true;
+  const login = async (username: string, password: string): Promise<boolean> => {
+    try {
+      const response = await authAPI.login({ username, password });
+      
+      if (response.success && response.data.access_token) {
+        // Create user object from successful login
+        const userData: User = {
+          id: '1', // You'll get this from a separate user info endpoint
+          email: username,
+          name: username,
+          role: 'admin', // You'll get this from a separate user info endpoint
+        };
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     }
-    
-    return false;
   };
 
   const logout = () => {
+    authAPI.logout();
     setUser(null);
-    localStorage.removeItem('mockUser');
+    localStorage.removeItem('user');
   };
 
   // Check for stored user on mount
-  useState(() => {
-    const storedUser = localStorage.getItem('mockUser');
-    if (storedUser) {
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    const token = authAPI.getToken();
+    
+    if (storedUser && token) {
       setUser(JSON.parse(storedUser));
     }
-  });
+  }, []);
 
   const value = {
     user,
     login,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: authAPI.isAuthenticated()
   };
 
   return (
