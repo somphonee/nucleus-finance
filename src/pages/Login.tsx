@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, Building2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import daecLogo from '@/assets/daec-logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -57,11 +58,10 @@ const Login = () => {
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <div className="p-3 rounded-full bg-primary/10">
-              <Building2 className="w-8 h-8 text-primary" />
-            </div>
+            <img src={daecLogo} alt="DAEC Logo" className="w-24 h-24 object-contain" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Welcome Back</h1>
+          <h1 className="text-3xl font-bold text-foreground">DAEC</h1>
+          <p className="text-lg text-foreground/80">Department of Agricultural Extension and Cooperatives</p>
           <p className="text-muted-foreground">Sign in to your accounting dashboard</p>
         </div>
 

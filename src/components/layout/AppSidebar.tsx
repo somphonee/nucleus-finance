@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import daecLogo from "@/assets/daec-logo.png";
 import { 
   DollarSign, 
   Users, 
@@ -133,13 +134,15 @@ export function AppSidebar() {
         <div className="flex items-center justify-between">
           {!collapsed && (
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-sidebar-primary-foreground" />
-              </div>
+              <img src={daecLogo} alt="DAEC Logo" className="w-8 h-8 object-contain" />
               <div>
-                <h2 className="text-xs font-bold text-sidebar-foreground">ລະບົບບັນຊີ</h2>
+                <h2 className="text-xs font-bold text-sidebar-foreground">DAEC</h2>
+                <p className="text-[10px] text-sidebar-foreground/70">ລະບົບບັນຊີ</p>
               </div>
             </div>
+          )}
+          {collapsed && (
+            <img src={daecLogo} alt="DAEC Logo" className="w-8 h-8 object-contain" />
           )}
           <Button
             variant="ghost"
