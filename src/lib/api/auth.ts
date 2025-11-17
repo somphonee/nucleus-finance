@@ -5,6 +5,14 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  full_name?: string;
+  role?: string;
+}
+
 export interface LoginResponse {
   success: boolean;
   data: {
@@ -12,6 +20,16 @@ export interface LoginResponse {
     refresh_token: string;
     token_type: string;
     expires_in: number;
+  };
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+  data: {
+    user_id: number;
+    username: string;
+    email: string;
   };
 }
 
@@ -25,6 +43,25 @@ export interface RefreshTokenResponse {
 }
 
 class AuthAPI {
+  async register(data: RegisterRequest): Promise<RegisterResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        message: 'Registration failed',
+      }));
+      throw new Error(error.message || 'Registration failed');
+    }
+
+    return response.json();
+  }
+
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',

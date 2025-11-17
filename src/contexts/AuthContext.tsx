@@ -14,7 +14,9 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
+  register: (username: string, email: string, password: string, fullName?: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
+  loginBypass: () => void;
   isAuthenticated: boolean;
 }
 
@@ -30,6 +32,34 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  const register = async (
+    username: string, 
+    email: string, 
+    password: string, 
+    fullName?: string
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const response = await authAPI.register({ 
+        username, 
+        email, 
+        password, 
+        full_name: fullName 
+      });
+      
+      if (response.success) {
+        return { success: true };
+      }
+      
+      return { success: false, error: response.message || 'Registration failed' };
+    } catch (error) {
+      console.error('Registration error:', error);
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Registration failed' 
+      };
+    }
+  };
 
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
@@ -55,6 +85,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const loginBypass = () => {
+    const mockUser: User = {
+      id: 'bypass-user',
+      email: 'demo@daec.com',
+      name: 'Demo User',
+      role: 'admin',
+    };
+    setUser(mockUser);
+    localStorage.setItem('user', JSON.stringify(mockUser));
+    localStorage.setItem('authToken', 'bypass-token');
+  };
+
   const logout = () => {
     authAPI.logout();
     setUser(null);
@@ -74,7 +116,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     login,
+    register,
     logout,
+    loginBypass,
     isAuthenticated: authAPI.isAuthenticated()
   };
 
