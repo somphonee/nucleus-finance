@@ -14,10 +14,12 @@ export function LanguageToggle() {
       variant="ghost"
       size="sm"
       onClick={toggleLanguage}
-      className="h-8 w-8 p-0"
+      className="h-9 px-3 gap-2"
     >
       <Globe className="h-4 w-4" />
-      <span className="sr-only">Toggle language</span>
+      <span className="text-sm font-medium">
+        {language === 'en' ? 'English' : 'ລາວ'}
+      </span>
     </Button>
   );
 }
