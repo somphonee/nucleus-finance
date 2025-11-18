@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
 import daecLogo from '@/assets/daec-logo.png';
+import { LanguageToggle } from '@/components/LanguageToggle';
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -78,10 +79,15 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
       <div className="w-full max-w-md space-y-6">
+        {/* Language Toggle */}
+        <div className="flex justify-end">
+          <LanguageToggle />
+        </div>
+        
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <img src={daecLogo} alt="DAEC Logo" className="w-24 h-24 object-contain" />
+            <img src={daecLogo} alt="DAEC Logo" className="w-40 h-40 object-contain" />
           </div>
           <h1 className="text-3xl font-bold text-foreground">DAEC</h1>
           <p className="text-lg text-foreground/80">Department of Agricultural Extension and Cooperatives</p>
