@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Loader2 } from 'lucide-react';
 import daecLogo from '@/assets/daec-logo.png';
 import { LanguageToggle } from '@/components/LanguageToggle';
@@ -22,6 +23,7 @@ const Login = () => {
   const [success, setSuccess] = useState('');
   
   const { login, register, loginBypass, isAuthenticated, user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   // Redirect based on user role
@@ -45,19 +47,19 @@ const Login = () => {
       if (isSignUp) {
         const result = await register(username, email, password, fullName);
         if (result.success) {
-          setSuccess('Registration successful! You can now sign in.');
+          setSuccess(t('login.registrationSuccess'));
           setIsSignUp(false);
           setEmail('');
           setPassword('');
           setUsername('');
           setFullName('');
         } else {
-          setError(result.error || 'Registration failed');
+          setError(result.error || t('login.registrationFailed'));
         }
       } else {
         const success = await login(email, password);
         if (!success) {
-          setError('Invalid email or password');
+          setError(t('login.invalidCredentials'));
         }
       }
     } catch (err) {
@@ -89,19 +91,19 @@ const Login = () => {
           <div className="flex justify-center mb-4">
             <img src={daecLogo} alt="DAEC Logo" className="w-40 h-40 object-contain" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">DAEC</h1>
-          <p className="text-lg text-foreground/80">Department of Agricultural Extension and Cooperatives</p>
-          <p className="text-muted-foreground">Sign in to your accounting dashboard</p>
+          <h1 className="text-3xl font-bold text-foreground">{t('login.title')}</h1>
+          <p className="text-lg text-foreground/80">{t('login.subtitle')}</p>
+          <p className="text-muted-foreground">{t('login.signInMessage')}</p>
         </div>
 
         {/* Login/Register Form */}
         <Card>
           <CardHeader>
-            <CardTitle>{isSignUp ? 'Sign Up' : 'Sign In'}</CardTitle>
+            <CardTitle>{isSignUp ? t('login.signUp') : t('login.signIn')}</CardTitle>
             <CardDescription>
               {isSignUp 
-                ? 'Create a new account to access the system'
-                : 'Enter your credentials to access the system'
+                ? t('login.createAccount')
+                : t('login.enterCredentials')
               }
             </CardDescription>
           </CardHeader>
@@ -110,11 +112,11 @@ const Login = () => {
               {isSignUp && (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
+                    <Label htmlFor="username">{t('login.username')}</Label>
                     <Input
                       id="username"
                       type="text"
-                      placeholder="Enter your username"
+                      placeholder={t('login.enterUsername')}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       required
@@ -122,11 +124,11 @@ const Login = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <Label htmlFor="fullName">{t('login.fullName')}</Label>
                     <Input
                       id="fullName"
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder={t('login.enterFullName')}
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                     />
@@ -135,11 +137,11 @@ const Login = () => {
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('login.email')}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t('login.enterEmail')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -147,11 +149,11 @@ const Login = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t('login.password')}</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t('login.enterPassword')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -176,7 +178,7 @@ const Login = () => {
                 disabled={isLoading}
               >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isSignUp ? 'Sign Up' : 'Sign In'}
+                {isSignUp ? t('login.signUp') : t('login.signIn')}
               </Button>
 
               <div className="text-center">
@@ -190,8 +192,8 @@ const Login = () => {
                   className="text-sm text-primary hover:underline"
                 >
                   {isSignUp 
-                    ? 'Already have an account? Sign in' 
-                    : "Don't have an account? Sign up"
+                    ? t('login.alreadyHaveAccount')
+                    : t('login.dontHaveAccount')
                   }
                 </button>
               </div>
@@ -203,7 +205,7 @@ const Login = () => {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-background px-2 text-muted-foreground">
-                  Or
+                  {t('login.or')}
                 </span>
               </div>
             </div>
@@ -214,7 +216,7 @@ const Login = () => {
               onClick={handleBypass}
               type="button"
             >
-              Skip Login (Demo Mode)
+              {t('login.skipLogin')}
             </Button>
           </CardContent>
         </Card>
@@ -222,9 +224,9 @@ const Login = () => {
         {/* Demo Accounts */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Demo Accounts</CardTitle>
+            <CardTitle className="text-sm">{t('login.demoAccounts')}</CardTitle>
             <CardDescription className="text-xs">
-              Click any account below to test different user roles
+              {t('login.demoAccountsDesc')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -233,7 +235,7 @@ const Login = () => {
               onClick={() => handleDemoLogin('admin@company.com')}
             >
               <div className="space-y-1">
-                <p className="text-sm font-medium">Admin User</p>
+                <p className="text-sm font-medium">{t('login.adminUser')}</p>
                 <p className="text-xs text-muted-foreground">admin@company.com</p>
               </div>
               <Badge variant="default">Admin</Badge>
@@ -244,7 +246,7 @@ const Login = () => {
               onClick={() => handleDemoLogin('user@company.com')}
             >
               <div className="space-y-1">
-                <p className="text-sm font-medium">Regular User</p>
+                <p className="text-sm font-medium">{t('login.regularUser')}</p>
                 <p className="text-xs text-muted-foreground">user@company.com</p>
               </div>
               <Badge variant="secondary">User</Badge>
@@ -255,7 +257,7 @@ const Login = () => {
               onClick={() => handleDemoLogin('userprovince@company.com')}
             >
               <div className="space-y-1">
-                <p className="text-sm font-medium">Province User</p>
+                <p className="text-sm font-medium">{t('login.provinceUser')}</p>
                 <p className="text-xs text-muted-foreground">userprovince@company.com</p>
               </div>
               <Badge variant="outline">Province</Badge>
@@ -264,7 +266,7 @@ const Login = () => {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground">
-          This is a demo system. Any password will work with the demo accounts.
+          {t('login.demoNote')}
         </p>
       </div>
     </div>
