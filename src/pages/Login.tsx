@@ -22,7 +22,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   const { login, register, loginBypass, isAuthenticated, user } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
@@ -86,11 +86,14 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
       <div className="w-full max-w-md space-y-6">
+
+
         {/* Language Toggle */}
         <div className="flex justify-end">
           <LanguageToggle />
         </div>
-        
+
+
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
@@ -106,7 +109,7 @@ const Login = () => {
           <CardHeader>
             <CardTitle>{isSignUp ? t('login.signUp') : t('login.signIn')}</CardTitle>
             <CardDescription>
-              {isSignUp 
+              {isSignUp
                 ? t('login.createAccount')
                 : t('login.enterCredentials')
               }
@@ -127,7 +130,7 @@ const Login = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="fullName">{t('login.fullName')}</Label>
                     <Input
@@ -140,23 +143,7 @@ const Login = () => {
                   </div>
                 </>
               )}
-              
-              <div className="space-y-2">
-                <Label htmlFor="language">
-                  <Globe className="inline mr-2 h-4 w-4" />
-                  {t("language")}
-                </Label>
-                <Select value={language} onValueChange={handleLanguageChange}>
-                  <SelectTrigger id="language">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="lo">ລາວ (Lao)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="email">{t('login.email')}</Label>
                 <Input
@@ -168,7 +155,7 @@ const Login = () => {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password">{t('login.password')}</Label>
                 <Input
@@ -193,9 +180,9 @@ const Login = () => {
                 </Alert>
               )}
 
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={isLoading}
               >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -212,7 +199,7 @@ const Login = () => {
                   }}
                   className="text-sm text-primary hover:underline"
                 >
-                  {isSignUp 
+                  {isSignUp
                     ? t('login.alreadyHaveAccount')
                     : t('login.dontHaveAccount')
                   }
@@ -231,9 +218,9 @@ const Login = () => {
               </div>
             </div>
 
-            <Button 
-              variant="outline" 
-              className="w-full" 
+            <Button
+              variant="outline"
+              className="w-full"
               onClick={handleBypass}
               type="button"
             >
@@ -251,7 +238,7 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div 
+            <div
               className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"
               onClick={() => handleDemoLogin('admin@company.com')}
             >
@@ -261,8 +248,8 @@ const Login = () => {
               </div>
               <Badge variant="default">Admin</Badge>
             </div>
-            
-            <div 
+
+            <div
               className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"
               onClick={() => handleDemoLogin('user@company.com')}
             >
@@ -272,8 +259,8 @@ const Login = () => {
               </div>
               <Badge variant="secondary">User</Badge>
             </div>
-            
-            <div 
+
+            <div
               className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"
               onClick={() => handleDemoLogin('userprovince@company.com')}
             >
