@@ -48,6 +48,7 @@ const translations = {
     
     // Common
     'common.amount': 'Amount',
+    'language': 'Language',
     'common.date': 'Date',
     'common.description': 'Description',
     'common.category': 'Category',
@@ -106,7 +107,6 @@ const translations = {
     'minutes': 'minutes',
     'Preferences': 'Preferences',
     'Customize your experience': 'Customize your experience',
-    'language': 'Language',
     'Dark Mode': 'Dark Mode',
     'Enable dark theme': 'Enable dark theme',
     'Auto Save': 'Auto Save',
