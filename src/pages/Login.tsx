@@ -6,9 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Globe } from 'lucide-react';
 import daecLogo from '@/assets/daec-logo.png';
 import { LanguageToggle } from '@/components/LanguageToggle';
 
@@ -23,8 +24,12 @@ const Login = () => {
   const [success, setSuccess] = useState('');
   
   const { login, register, loginBypass, isAuthenticated, user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
+
+  const handleLanguageChange = (value: string) => {
+    setLanguage(value as 'en' | 'lo');
+  };
 
   // Redirect based on user role
   useEffect(() => {
@@ -135,6 +140,22 @@ const Login = () => {
                   </div>
                 </>
               )}
+              
+              <div className="space-y-2">
+                <Label htmlFor="language">
+                  <Globe className="inline mr-2 h-4 w-4" />
+                  {t("language")}
+                </Label>
+                <Select value={language} onValueChange={handleLanguageChange}>
+                  <SelectTrigger id="language">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="lo">ລາວ (Lao)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               
               <div className="space-y-2">
                 <Label htmlFor="email">{t('login.email')}</Label>
