@@ -32,6 +32,9 @@ import Categories from "./pages/Categories";
 import Organizations from "./pages/Organizations";
 import AuditLogs from "./pages/AuditLogs";
 import CooperativeRegistration from "./pages/CooperativeRegistration";
+import CooperativeList from "./pages/cooperatives/CooperativeList";
+import CooperativeDetail from "./pages/cooperatives/CooperativeDetail";
+import CooperativeForm from "./pages/cooperatives/CooperativeForm";
 
 const queryClient = new QueryClient();
 
@@ -124,6 +127,11 @@ const App = () => (
                           <CooperativeRegistration />
                         </ProtectedRoute>
                       } />
+                      {/* Cooperative Module Routes */}
+                      <Route path="/cooperatives" element={<CooperativeList />} />
+                      <Route path="/cooperatives/new" element={<CooperativeForm />} />
+                      <Route path="/cooperatives/:id" element={<CooperativeDetail />} />
+                      <Route path="/cooperatives/:id/edit" element={<CooperativeForm />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>
