@@ -16,6 +16,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface Organization {
   id: string;
@@ -80,6 +88,8 @@ const Organizations = () => {
   const [organizations, setOrganizations] = useState<Organization[]>(mockOrganizations);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingOrg, setEditingOrg] = useState<Organization | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const [formData, setFormData] = useState({
     code: "",
     name: "",
@@ -117,7 +127,7 @@ const Organizations = () => {
 
   const handleUpdate = () => {
     if (editingOrg) {
-      setOrganizations(organizations.map(org => 
+      setOrganizations(organizations.map(org =>
         org.id === editingOrg.id ? { ...org, ...formData } : org
       ));
       setIsDialogOpen(false);
@@ -139,6 +149,13 @@ const Organizations = () => {
   const totalMembers = organizations.reduce((sum, org) => sum + org.memberCount, 0);
   const activeOrgs = organizations.filter(org => org.isActive).length;
 
+  // Pagination
+  const totalPages = Math.ceil(organizations.length / itemsPerPage);
+  const paginatedOrgs = organizations.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header */}
@@ -150,15 +167,15 @@ const Organizations = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="flex items-center gap-2"
             onClick={() => toast({ title: "Exporting", description: "Exporting organizations..." })}
           >
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">Export</span>
           </Button>
-          <Button 
+          <Button
             className="flex items-center gap-2"
             onClick={() => {
               resetForm();
@@ -232,7 +249,7 @@ const Organizations = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {organizations.map((org) => (
+                {paginatedOrgs.map((org) => (
                   <TableRow key={org.id}>
                     <TableCell className="font-mono text-sm">{org.code}</TableCell>
                     <TableCell className="font-medium">{org.name}</TableCell>
@@ -272,6 +289,39 @@ const Organizations = () => {
               </TableBody>
             </Table>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-4 flex justify-end">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </CardContent>
       </Card>
 

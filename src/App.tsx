@@ -59,6 +59,9 @@ const App = () => (
                       <Route path="/loan-management" element={<LoanManagement />} />
                       <Route path="/general-ledger" element={<GeneralLedger />} />
                       <Route path="/reports" element={<Reports />} />
+                      <Route path="/reports" element={<Reports />} />
+
+
                       <Route path="/user-management" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                           <UserManagement />
@@ -127,11 +130,27 @@ const App = () => (
                           <CooperativeRegistration />
                         </ProtectedRoute>
                       } />
-                      {/* Cooperative Module Routes */}
-                      <Route path="/cooperatives" element={<CooperativeList />} />
-                      <Route path="/cooperatives/new" element={<CooperativeForm />} />
-                      <Route path="/cooperatives/:id" element={<CooperativeDetail />} />
-                      <Route path="/cooperatives/:id/edit" element={<CooperativeForm />} />
+                      {/* Cooperative Module Routes - Admin (full access) and Province (view only) */}
+                      <Route path="/cooperatives" element={
+                        <ProtectedRoute allowedRoles={['admin', 'userprovince']}>
+                          <CooperativeList />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/cooperatives/new" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                          <CooperativeForm />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/cooperatives/:id" element={
+                        <ProtectedRoute allowedRoles={['admin', 'userprovince']}>
+                          <CooperativeDetail />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/cooperatives/:id/edit" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                          <CooperativeForm />
+                        </ProtectedRoute>
+                      } />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>

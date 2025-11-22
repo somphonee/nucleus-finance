@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
-import { certificatesAPI } from '@/lib/api/certificates';
-import { provincesAPI } from '@/lib/api/provinces';
+import { useAuth } from '@/contexts/AuthContext';
+import { mockCooperativesAPI } from '@/lib/mockData/cooperatives';
 import {
   Table,
   TableBody,
@@ -61,6 +61,9 @@ export default function CooperativeList() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  const isAdmin = user?.role === 'admin';
 
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +80,7 @@ export default function CooperativeList() {
   const loadCertificates = async () => {
     try {
       setLoading(true);
-      const response = await certificatesAPI.getCertificates({
+      const response = await mockCooperativesAPI.getCertificates({
         page: currentPage,
         page_size: 10,
         search: searchTerm,
@@ -101,7 +104,7 @@ export default function CooperativeList() {
     if (!selectedId) return;
 
     try {
-      await certificatesAPI.deleteCertificate(selectedId);
+      await mockCooperativesAPI.deleteCertificate(selectedId);
       toast({
         title: 'Success',
         description: 'Cooperative deleted successfully',
@@ -121,7 +124,7 @@ export default function CooperativeList() {
 
   const handleDownloadPDF = async (id: number) => {
     try {
-      const blob = await certificatesAPI.downloadPDF(id);
+      const blob = await mockCooperativesAPI.downloadPDF(id);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -130,7 +133,7 @@ export default function CooperativeList() {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      
+
       toast({
         title: 'Success',
         description: 'PDF downloaded successfully',
@@ -153,10 +156,12 @@ export default function CooperativeList() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl">Cooperative Registration</CardTitle>
-          <Button onClick={() => navigate('/cooperatives/new')}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Cooperative
-          </Button>
+          {isAdmin && (
+            <Button onClick={() => navigate('/cooperatives/new')}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Cooperative
+            </Button>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Search and Filters */}
@@ -224,20 +229,24 @@ export default function CooperativeList() {
                               <Download className="mr-2 h-4 w-4" />
                               Download PDF
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => navigate(`/cooperatives/${cert.id}/edit`)}>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setSelectedId(cert.id);
-                                setDeleteDialogOpen(true);
-                              }}
-                              className="text-destructive"
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
+                            {isAdmin && (
+                              <>
+                                <DropdownMenuItem onClick={() => navigate(`/cooperatives/${cert.id}/edit`)}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    setSelectedId(cert.id);
+                                    setDeleteDialogOpen(true);
+                                  }}
+                                  className="text-destructive"
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>

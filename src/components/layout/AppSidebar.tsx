@@ -65,11 +65,11 @@ const provinceAccountingItems = [
 ];
 
 const systemItems = [
+    { title: "nav.cooperativeRegistration", url: "/cooperatives", icon: FileCheck, roles: ['admin'] },
   { title: "nav.userManagement", url: "/user-management", icon: UserCog, adminOnly: true },
   { title: "nav.categories", url: "/categories", icon: Tags, adminOnly: true },
   { title: "nav.organizations", url: "/organizations", icon: MapPin, adminOnly: true },
   { title: "nav.auditLogs", url: "/audit-logs", icon: FileSearch, adminOnly: true },
-  { title: "nav.cooperativeRegistration", url: "/cooperative-registration", icon: FileCheck, roles: ['admin', 'userprovince'] },
   { title: "nav.userProfile", url: "/user-profile", icon: User },
   { title: "nav.settings", url: "/settings", icon: Settings },
 ];

@@ -13,6 +13,14 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface AuditLog {
   id: string;
@@ -132,18 +140,26 @@ const AuditLogs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterModule, setFilterModule] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const filteredLogs = mockAuditLogs.filter((log) => {
-    const matchesSearch = 
+    const matchesSearch =
       log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.details.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesModule = filterModule === "all" || log.module === filterModule;
     const matchesStatus = filterStatus === "all" || log.status === filterStatus;
 
     return matchesSearch && matchesModule && matchesStatus;
   });
+
+  const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
+  const paginatedLogs = filteredLogs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -185,8 +201,8 @@ const AuditLogs = () => {
             Track all system activities and user actions
           </p>
         </div>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="flex items-center gap-2"
           onClick={() => toast({ title: "Exporting", description: "Exporting audit logs..." })}
         >
@@ -303,7 +319,7 @@ const AuditLogs = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredLogs.map((log) => (
+                {paginatedLogs.map((log) => (
                   <TableRow key={log.id}>
                     <TableCell className="font-mono text-sm whitespace-nowrap">
                       {log.timestamp}
@@ -327,9 +343,9 @@ const AuditLogs = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => toast({ 
-                          title: "Log Details", 
-                          description: log.details 
+                        onClick={() => toast({
+                          title: "Log Details",
+                          description: log.details
                         })}
                       >
                         <Eye className="w-4 h-4" />
@@ -343,6 +359,39 @@ const AuditLogs = () => {
           {filteredLogs.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               No audit logs found matching your filters
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-4 flex justify-end">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
           )}
         </CardContent>

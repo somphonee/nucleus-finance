@@ -23,7 +23,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const { login, register, loginBypass, isAuthenticated, user } = useAuth();
+  const { login, register, loginBypass, loginBypassProvince, isAuthenticated, user } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
 
@@ -218,14 +218,25 @@ const Login = () => {
               </div>
             </div>
 
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleBypass}
-              type="button"
-            >
-              {t('login.skipLogin')}
-            </Button>
+            <div className="space-y-2">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => loginBypass()}
+                type="button"
+              >
+                Skip Login (Demo mode admin)
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => loginBypassProvince()}
+                type="button"
+              >
+                Skip Login (Demo mode province)
+              </Button>
+            </div>
           </CardContent>
         </Card>
 

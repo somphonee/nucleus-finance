@@ -17,6 +17,7 @@ interface AuthContextType {
   register: (username: string, email: string, password: string, fullName?: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   loginBypass: () => void;
+  loginBypassProvince: () => void;
   isAuthenticated: boolean;
 }
 
@@ -34,29 +35,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const register = async (
-    username: string, 
-    email: string, 
-    password: string, 
+    username: string,
+    email: string,
+    password: string,
     fullName?: string
   ): Promise<{ success: boolean; error?: string }> => {
     try {
-      const response = await authAPI.register({ 
-        username, 
-        email, 
-        password, 
-        full_name: fullName 
+      const response = await authAPI.register({
+        username,
+        email,
+        password,
+        full_name: fullName
       });
-      
+
       if (response.success) {
         return { success: true };
       }
-      
+
       return { success: false, error: response.message || 'Registration failed' };
     } catch (error) {
       console.error('Registration error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Registration failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Registration failed'
       };
     }
   };
@@ -64,7 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
       const response = await authAPI.login({ username, password });
-      
+
       if (response.success && response.data.access_token) {
         // Create user object from successful login
         const userData: User = {
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem('user', JSON.stringify(userData));
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error('Login error:', error);
@@ -97,6 +98,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('authToken', 'bypass-token');
   };
 
+  const loginBypassProvince = () => {
+    const mockUser: User = {
+      id: 'bypass-province-user',
+      email: 'province@daec.com',
+      name: 'Demo Province User',
+      role: 'userprovince',
+      province: 'Demo Province',
+    };
+    setUser(mockUser);
+    localStorage.setItem('user', JSON.stringify(mockUser));
+    localStorage.setItem('authToken', 'bypass-province-token');
+  };
+
   const logout = () => {
     authAPI.logout();
     setUser(null);
@@ -107,7 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const token = authAPI.getToken();
-    
+
     if (storedUser && token) {
       setUser(JSON.parse(storedUser));
     }
@@ -119,6 +133,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     register,
     logout,
     loginBypass,
+    loginBypassProvince,
     isAuthenticated: authAPI.isAuthenticated()
   };
 

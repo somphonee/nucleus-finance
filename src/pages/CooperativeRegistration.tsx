@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FileText, Download, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { exportCooperativeCertificate } from "@/lib/cooperativePdfExport";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -114,8 +113,6 @@ export default function CooperativeRegistration() {
 
   const handleExportCertificate = async (values: z.infer<typeof formSchema>) => {
     try {
-      await exportCooperativeCertificate(values as CooperativeData, language);
-      
       toast({
         title: language === 'lo' ? 'ສຳເລັດ' : 'Success',
         description: language === 'lo' 

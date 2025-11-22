@@ -7,6 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Search, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function CardTransactions() {
   const { toast } = useToast();
@@ -22,15 +30,34 @@ export default function CardTransactions() {
     { id: 5, date: "2025-01-15", cardNo: "**** 9012", cardType: "Debit", merchant: "ຮ້ານກາເຟ", amount: 100000, status: "success", province: "ຫຼວງພະບາງ" },
   ];
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   const cardTransactions = useMemo(() => {
+    let filtered = allTransactions;
+
     if (user?.role === 'userprovince' && user?.province) {
-      return allTransactions.filter(t => t.province === user.province);
+      filtered = filtered.filter(t => t.province === user.province);
     }
     if (selectedProvince !== 'all') {
-      return allTransactions.filter(t => t.province === selectedProvince);
+      filtered = filtered.filter(t => t.province === selectedProvince);
     }
-    return allTransactions;
-  }, [user, selectedProvince]);
+    if (searchTerm) {
+      filtered = filtered.filter(t =>
+        t.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.cardNo.includes(searchTerm)
+      );
+    }
+    return filtered;
+  }, [user, selectedProvince, searchTerm]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(cardTransactions.length / itemsPerPage);
+  const paginatedTransactions = cardTransactions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="space-y-6">
@@ -105,7 +132,10 @@ export default function CardTransactions() {
             <Input
               placeholder="ຄົ້ນຫາລາຍການບັດ..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1); // Reset to first page on search
+              }}
               className="pl-10"
             />
           </div>
@@ -124,32 +154,73 @@ export default function CardTransactions() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {cardTransactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell>{transaction.date}</TableCell>
-                    <TableCell className="font-mono">{transaction.cardNo}</TableCell>
-                    <TableCell>
-                      <Badge variant={transaction.cardType === "Debit" ? "outline" : "secondary"}>
-                        {transaction.cardType}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{transaction.merchant}</TableCell>
-                    <TableCell className="text-right font-medium">
-                      {transaction.amount.toLocaleString()} ກີບ
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={transaction.status === "success" ? "default" : "secondary"}>
-                        {transaction.status === "success" ? "ສຳເລັດ" : "ລໍຖ້າ"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="outline" size="sm">ລາຍລະອຽດ</Button>
+                {paginatedTransactions.length > 0 ? (
+                  paginatedTransactions.map((transaction) => (
+                    <TableRow key={transaction.id}>
+                      <TableCell>{transaction.date}</TableCell>
+                      <TableCell className="font-mono">{transaction.cardNo}</TableCell>
+                      <TableCell>
+                        <Badge variant={transaction.cardType === "Debit" ? "outline" : "secondary"}>
+                          {transaction.cardType}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{transaction.merchant}</TableCell>
+                      <TableCell className="text-right font-medium">
+                        {transaction.amount.toLocaleString()} ກີບ
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={transaction.status === "success" ? "default" : "secondary"}>
+                          {transaction.status === "success" ? "ສຳເລັດ" : "ລໍຖ້າ"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="outline" size="sm">ລາຍລະອຽດ</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8">
+                      ບໍ່ພົບຂໍ້ມູນ
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-4 flex justify-end">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

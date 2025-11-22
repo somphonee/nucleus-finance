@@ -33,7 +33,7 @@ const translations = {
     'nav.organizations': 'Organizations',
     'nav.auditLogs': 'Audit Logs',
     'nav.cooperativeRegistration': 'Cooperative Registration',
-    
+
     // Dashboard
     'dashboard.title': 'Financial Dashboard',
     'dashboard.totalCash': 'Total Cash',
@@ -45,7 +45,7 @@ const translations = {
     'dashboard.newMember': 'New Member',
     'dashboard.generateReport': 'Generate Report',
     'dashboard.recentTransactions': 'Recent Transactions',
-    
+
     // Common
     'common.amount': 'Amount',
     'language': 'Language',
@@ -67,7 +67,7 @@ const translations = {
     'common.name': 'Name',
     'common.id': 'ID',
     'common.type': 'Type',
-    
+
     // User Profile & Settings
     'userProfile': 'User Profile',
     'settings': 'Settings',
@@ -113,7 +113,7 @@ const translations = {
     'Automatically save changes': 'Automatically save changes',
     'Reset to Default': 'Reset to Default',
     'Save Settings': 'Save Settings',
-    
+
     // Cooperative Registration
     'cooperative.registration': 'Cooperative Registration',
     'cooperative.subtitle': 'Manage cooperative registration and certificates',
@@ -138,14 +138,31 @@ const translations = {
     'cooperative.numberOfMembers': 'Number of Members',
     'cooperative.cooperativePurpose': 'Cooperative Purpose',
     'cooperative.supervisingAuthority': 'Supervising Authority',
-    
+    'cooperative.editTitle': 'Edit Cooperative',
+    'cooperative.addTitle': 'Add New Cooperative',
+    'cooperative.registrationInfo': 'Registration Information',
+    'cooperative.cooperativeInfo': 'Cooperative Information',
+    'cooperative.chairmanInfo': 'Chairman Information',
+    'cooperative.financialInfo': 'Financial Information',
+    'cooperative.addressContact': 'Address & Contact',
+    'cooperative.additionalInfo': 'Additional Information',
+    'cooperative.backToList': 'Back to List',
+    'cooperative.save': 'Save',
+    'cooperative.update': 'Update',
+    'cooperative.cancel': 'Cancel',
+    'cooperative.successRegister': 'Cooperative registered successfully',
+    'cooperative.successUpdate': 'Cooperative updated successfully',
+    'cooperative.errorRegister': 'Failed to register cooperative',
+    'cooperative.errorUpdate': 'Failed to update cooperative',
+    'cooperative.errorLoad': 'Failed to load cooperative data',
+
     // Cash Management
     'cash.title': 'Cash Management',
     'cash.addTransaction': 'Add Cash Transaction',
     'cash.inflow': 'Cash Inflow',
     'cash.outflow': 'Cash Outflow',
     'cash.runningBalance': 'Running Balance',
-    
+
     // Member Savings
     'savings.title': 'Member Savings',
     'savings.addMember': 'Add New Member',
@@ -154,13 +171,13 @@ const translations = {
     'savings.withdrawal': 'Withdrawal',
     'savings.carriedForward': 'Carried Forward',
     'savings.monthlyDeposits': 'Monthly Deposits',
-    
+
     // Shares
     'shares.title': 'Shares Tracking',
     'shares.addContribution': 'Add Share Contribution',
     'shares.ownership': 'Ownership',
     'shares.contribution': 'Contribution',
-    
+
     // Loans
     'loans.title': 'Loan Management',
     'loans.addLoan': 'Add New Loan',
@@ -169,7 +186,7 @@ const translations = {
     'loans.remaining': 'Remaining',
     'loans.interest': 'Interest',
     'loans.issued': 'Issued',
-    
+
     // General Ledger
     'ledger.title': 'General Ledger',
     'ledger.cash': 'Cash',
@@ -178,7 +195,7 @@ const translations = {
     'ledger.loans': 'Loans',
     'ledger.income': 'Income',
     'ledger.expenditure': 'Expenditure',
-    
+
     // Reports
     'reports.title': 'Reports & Analytics',
     'reports.monthlyIncome': 'Monthly Income Report',
@@ -186,7 +203,7 @@ const translations = {
     'reports.monthlyExpenses': 'Monthly Expenditure Report',
     'reports.yearlyExpenses': 'Yearly Expenditure Report',
     'reports.incomeVsExpenses': 'Income vs Expenses',
-    
+
     // Login & Authentication
     'login.title': 'DAEC',
     'login.subtitle': 'Department of Agricultural Extension and Cooperatives',
@@ -241,7 +258,7 @@ const translations = {
     'nav.organizations': 'ອົງກອນ ແລະ ແຂວງ',
     'nav.auditLogs': 'ບັນທຶກການກວດສອບ',
     'nav.cooperativeRegistration': 'ລົງທະບຽນສະຫະກອນ',
-    
+
     // Dashboard
     'dashboard.title': 'ໜ້າຫຼັກການເງິນ',
     'dashboard.totalCash': 'ເງິນສົດລວມ',
@@ -253,7 +270,7 @@ const translations = {
     'dashboard.newMember': 'ສະມາຊິກໃໝ່',
     'dashboard.generateReport': 'ສ້າງລາຍງານ',
     'dashboard.recentTransactions': 'ລາຍການລ່າສຸດ',
-    
+
     // Common
     'common.amount': 'ຈຳນວນເງິນ',
     'common.date': 'ວັນທີ',
@@ -274,7 +291,7 @@ const translations = {
     'common.name': 'ຊື່',
     'common.id': 'ລະຫັດ',
     'common.type': 'ປະເພດ',
-    
+
     // User Profile & Settings
     'userProfile': 'ໂປຣໄຟລ່ຜູ້ໃຊ້',
     'settings': 'ຕັ້ງຄ່າ',
@@ -321,7 +338,7 @@ const translations = {
     'Automatically save changes': 'ບັນທຶກການປ່ຽນແປງອັດຕະໂນມັດ',
     'Reset to Default': 'ຣີເຊັດເປັນຄ່າເລີ່ມຕົ້ນ',
     'Save Settings': 'ບັນທຶກການຕັ້ງຄ່າ',
-    
+
     // Cooperative Registration
     'cooperative.registration': 'ການລົງທະບຽນສະຫະກອນ',
     'cooperative.subtitle': 'ຈັດການການລົງທະບຽນສະຫະກອນ ແລະ ໃບຢັ້ງຢືນ',
@@ -346,14 +363,31 @@ const translations = {
     'cooperative.numberOfMembers': 'ຈຳນວນສະມາຊິກ',
     'cooperative.cooperativePurpose': 'ຈຸດປະສົງສະຫະກອນ',
     'cooperative.supervisingAuthority': 'ອົງການຄຸ້ມຄອງ',
-    
+    'cooperative.editTitle': 'ແກ້ໄຂຂໍ້ມູນສະຫະກອນ',
+    'cooperative.addTitle': 'ເພີ່ມສະຫະກອນໃໝ່',
+    'cooperative.registrationInfo': 'ຂໍ້ມູນການລົງທະບຽນ',
+    'cooperative.cooperativeInfo': 'ຂໍ້ມູນສະຫະກອນ',
+    'cooperative.chairmanInfo': 'ຂໍ້ມູນປະທານ',
+    'cooperative.financialInfo': 'ຂໍ້ມູນການເງິນ',
+    'cooperative.addressContact': 'ທີ່ຢູ່ ແລະ ການຕິດຕໍ່',
+    'cooperative.additionalInfo': 'ຂໍ້ມູນເພີ່ມເຕີມ',
+    'cooperative.backToList': 'ກັບຄືນສູ່ລາຍການ',
+    'cooperative.save': 'ບັນທຶກ',
+    'cooperative.update': 'ອັບເດດ',
+    'cooperative.cancel': 'ຍົກເລີກ',
+    'cooperative.successRegister': 'ລົງທະບຽນສະຫະກອນສຳເລັດແລ້ວ',
+    'cooperative.successUpdate': 'ອັບເດດຂໍ້ມູນສະຫະກອນສຳເລັດແລ້ວ',
+    'cooperative.errorRegister': 'ການລົງທະບຽນສະຫະກອນລົ້ມເຫລວ',
+    'cooperative.errorUpdate': 'ການອັບເດດຂໍ້ມູນສະຫະກອນລົ້ມເຫລວ',
+    'cooperative.errorLoad': 'ໂຫຼດຂໍ້ມູນສະຫະກອນລົ້ມເຫລວ',
+
     // Cash Management
     'cash.title': 'ການຈັດການເງິນສົດ',
     'cash.addTransaction': 'ເພີ່ມລາຍການເງິນສົດ',
     'cash.inflow': 'ເງິນເຂົ້າ',
     'cash.outflow': 'ເງິນອອກ',
     'cash.runningBalance': 'ຍອດເຫຼືອປະຈຳ',
-    
+
     // Member Savings
     'savings.title': 'ເງິນຝາກສະມາຊິກ',
     'savings.addMember': 'ເພີ່ມສະມາຊິກໃໝ່',
@@ -362,13 +396,13 @@ const translations = {
     'savings.withdrawal': 'ຖອນເງິນ',
     'savings.carriedForward': 'ຍອດຍົກມາ',
     'savings.monthlyDeposits': 'ເງິນຝາກລາຍເດືອນ',
-    
+
     // Shares
     'shares.title': 'ການຕິດຕາມຮຸ້ນ',
     'shares.addContribution': 'ເພີ່ມການປະກອບຮຸ້ນ',
     'shares.ownership': 'ການເປັນເຈົ້າຂອງ',
     'shares.contribution': 'ການປະກອບຮຸ້ນ',
-    
+
     // Loans
     'loans.title': 'ການຈັດການກູ້ຢຶມ',
     'loans.addLoan': 'ເພີ່ມເງິນກູ້ໃໝ່',
@@ -377,7 +411,7 @@ const translations = {
     'loans.remaining': 'ຍອດເຫຼືອ',
     'loans.interest': 'ດອກເບ້ຍ',
     'loans.issued': 'ອອກໃຫ້',
-    
+
     // General Ledger
     'ledger.title': 'ບັນຊີລາຍການທົ່ວໄປ',
     'ledger.cash': 'ເງິນສົດ',
@@ -386,7 +420,7 @@ const translations = {
     'ledger.loans': 'ເງິນກູ້',
     'ledger.income': 'ລາຍຮັບ',
     'ledger.expenditure': 'ລາຍຈ່າຍ',
-    
+
     // Reports
     'reports.title': 'ລາຍງານ ແລະ ການວິເຄາະ',
     'reports.monthlyIncome': 'ລາຍງານລາຍຮັບລາຍເດືອນ',
@@ -394,7 +428,7 @@ const translations = {
     'reports.monthlyExpenses': 'ລາຍງານລາຍຈ່າຍລາຍເດືອນ',
     'reports.yearlyExpenses': 'ລາຍງານລາຍຈ່າຍປະຈຳປີ',
     'reports.incomeVsExpenses': 'ລາຍຮັບ ປຽບທຽບ ລາຍຈ່າຍ',
-    
+
     // Login & Authentication
     'login.title': 'ກົມສົ່ງເສີມກະສິກຳ ແລະ ສະຫະກອນ',
     'login.subtitle': 'ກະຊວງກະສິກຳ ແລະ ປ່າໄມ້',
@@ -431,7 +465,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('lo');
-  
+
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations[typeof language]] || key;
   };

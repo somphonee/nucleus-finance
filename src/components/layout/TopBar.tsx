@@ -37,11 +37,11 @@ export function TopBar() {
       .toUpperCase()
       .substring(0, 2);
   };
-  
+
   return (
     <header className="h-16 bg-card border-b border-card-border px-6 flex items-center justify-between">
       <div className="flex items-center space-x-4 flex-1">
-        <SidebarTrigger className="md:hidden" />
+        {/* <SidebarTrigger className="md:hidden" /> */}
         <div className="relative max-w-md flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
@@ -54,7 +54,7 @@ export function TopBar() {
       <div className="flex items-center space-x-4">
         {/* Theme Toggle */}
         <ThemeToggle />
-        
+
         {/* Language Selector */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -78,8 +78,8 @@ export function TopBar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="relative hover:bg-primary-light/20">
               <Bell className="w-4 h-4" />
-              <Badge 
-                variant="destructive" 
+              <Badge
+                variant="destructive"
                 className="absolute -top-1 -right-1 w-5 h-5 text-xs p-0 flex items-center justify-center"
               >
                 3
@@ -143,7 +143,7 @@ export function TopBar() {
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="hover:bg-destructive/10 text-destructive cursor-pointer"
               onClick={logout}
             >
