@@ -1,146 +1,137 @@
-import { useMemo, useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, Printer } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { mockDailyLedgerAPI, DailyLedgerEntry } from "@/lib/mockData/dailyLedger";
 
 export default function DailyLedger() {
-  const { toast } = useToast();
-  const { user } = useAuth();
-  const [selectedProvince, setSelectedProvince] = useState("all");
+  const [entries, setEntries] = useState<DailyLedgerEntry[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  const allEntries = [
-    { id: 1, accountCode: "1011", accountName: "ເງິນສົດ", debit: 5000000, credit: 0, balance: 5000000, province: "ວຽງຈັນ" },
-    { id: 2, accountCode: "1021", accountName: "ທະນາຄານ BCEL", debit: 10000000, credit: 0, balance: 10000000, province: "ວຽງຈັນ" },
-    { id: 3, accountCode: "2011", accountName: "ເງິນກູ້ຢືມ", debit: 0, credit: 3000000, balance: 3000000, province: "ວຽງຈັນ" },
-    { id: 4, accountCode: "3011", accountName: "ທຶນຈົດທະບຽນ", debit: 0, credit: 12000000, balance: 12000000, province: "ວຽງຈັນ" },
-    { id: 5, accountCode: "1011", accountName: "ເງິນສົດ", debit: 3000000, credit: 0, balance: 3000000, province: "ຫຼວງພະບາງ" },
-  ];
+  useEffect(() => {
+    const loadData = async () => {
+      const response = await mockDailyLedgerAPI.getEntries();
+      setEntries(response.data);
+    };
+    loadData();
+  }, []);
 
-  const dailyEntries = useMemo(() => {
-    if (user?.role === 'userprovince' && user?.province) {
-      return allEntries.filter(e => e.province === user.province);
-    }
-    if (selectedProvince !== 'all') {
-      return allEntries.filter(e => e.province === selectedProvince);
-    }
-    return allEntries;
-  }, [user, selectedProvince]);
+  const totalDebit = entries.reduce((sum, e) => sum + e.debit, 0);
+  const totalCredit = entries.reduce((sum, e) => sum + e.credit, 0);
 
-  const totalDebit = dailyEntries.reduce((sum, entry) => sum + entry.debit, 0);
-  const totalCredit = dailyEntries.reduce((sum, entry) => sum + entry.credit, 0);
+  // Pagination
+  const totalPages = Math.ceil(entries.length / itemsPerPage);
+  const paginatedEntries = entries.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">ປື້ມບັນຊີປະຈຳວັນ</h1>
-        <p className="text-muted-foreground mt-2">ບັນທຶກກິດຈະກຳການເງິນປະຈຳວັນ</p>
+        <h1 className="text-3xl font-bold">ບັນຊີປະຈຳວັນ</h1>
+        <p className="text-muted-foreground mt-2">ບັນທຶກລາຍການບັນຊີປະຈຳວັນ</p>
       </div>
 
+      {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">ດີບິດທັງໝົດ</CardTitle>
+          <CardHeader>
+            <CardTitle className="text-sm">ລວມລາຍການ</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{entries.length} ລາຍການ</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">ລວມເດບິດ</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-income">{totalDebit.toLocaleString()} ກີບ</div>
-            <p className="text-xs text-muted-foreground">ວັນນີ້</p>
           </CardContent>
         </Card>
-
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">ເຄຣດິດທັງໝົດ</CardTitle>
+          <CardHeader>
+            <CardTitle className="text-sm">ລວມເຄຣດິດ</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-expense">{totalCredit.toLocaleString()} ກີບ</div>
-            <p className="text-xs text-muted-foreground">ວັນນີ້</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">ຍອດດຸ່ນດ່ຽງ</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${totalDebit === totalCredit ? 'text-success' : 'text-destructive'}`}>
-              {totalDebit === totalCredit ? 'ດຸ່ນດ່ຽງ' : 'ບໍ່ດຸ່ນດ່ຽງ'}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              ຕ່າງກັນ: {Math.abs(totalDebit - totalCredit).toLocaleString()} ກີບ
-            </p>
           </CardContent>
         </Card>
       </div>
 
+      {/* Ledger Table */}
       <Card>
         <CardHeader>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <CardTitle>ບັນຊີປະຈຳວັນ - {new Date().toLocaleDateString('lo-LA')}</CardTitle>
-              <CardDescription>ລາຍການກິດຈະກຳການເງິນວັນນີ້</CardDescription>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" className="gap-2" onClick={() => {
-                toast({ title: "ກຳລັງພິມ", description: "ກຳລັງພິມລາຍງານປະຈຳວັນ..." });
-              }}>
-                <Printer className="h-4 w-4" />
-                ພິມ
-              </Button>
-              <Button variant="outline" className="gap-2" onClick={() => {
-                toast({ title: "ກຳລັງສົ່ງອອກ", description: "ກຳລັງສົ່ງອອກຂໍ້ມູນເປັນໄຟລ์ Excel..." });
-              }}>
-                <Download className="h-4 w-4" />
-                ສົ່ງອອກ
-              </Button>
-            </div>
-          </div>
+          <CardTitle>ລາຍການບັນຊີ</CardTitle>
+          <CardDescription>ບັນທຶກການບັນຊີແບບເດບິດ-ເຄຣດິດ</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ວັນທີ</TableHead>
                   <TableHead>ລະຫັດບັນຊີ</TableHead>
                   <TableHead>ຊື່ບັນຊີ</TableHead>
-                  <TableHead className="text-right">ດີບິດ</TableHead>
+                  <TableHead>ລາຍລະອຽດ</TableHead>
+                  <TableHead className="text-right">ເດບິດ</TableHead>
                   <TableHead className="text-right">ເຄຣດິດ</TableHead>
-                  <TableHead className="text-right">ຍອດເງິນ</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dailyEntries.map((entry) => (
+                {paginatedEntries.map((entry) => (
                   <TableRow key={entry.id}>
-                    <TableCell className="font-mono">{entry.accountCode}</TableCell>
-                    <TableCell className="font-medium">{entry.accountName}</TableCell>
+                    <TableCell>{entry.date}</TableCell>
+                    <TableCell>{entry.account_code}</TableCell>
+                    <TableCell>{entry.account_name}</TableCell>
+                    <TableCell>{entry.description}</TableCell>
                     <TableCell className="text-right text-income font-medium">
                       {entry.debit > 0 ? entry.debit.toLocaleString() : "-"}
                     </TableCell>
                     <TableCell className="text-right text-expense font-medium">
                       {entry.credit > 0 ? entry.credit.toLocaleString() : "-"}
                     </TableCell>
-                    <TableCell className="text-right font-bold">
-                      {entry.balance.toLocaleString()}
-                    </TableCell>
                   </TableRow>
                 ))}
-                <TableRow className="bg-muted/50 font-bold">
-                  <TableCell colSpan={2} className="text-right">ລວມທັງໝົດ:</TableCell>
-                  <TableCell className="text-right text-income">{totalDebit.toLocaleString()}</TableCell>
-                  <TableCell className="text-right text-expense">{totalCredit.toLocaleString()}</TableCell>
-                  <TableCell className="text-right">
-                    {totalDebit === totalCredit ? (
-                      <span className="text-success">✓ ດຸ່ນດ່ຽງ</span>
-                    ) : (
-                      <span className="text-destructive">✗ ບໍ່ດຸ່ນດ່ຽງ</span>
-                    )}
-                  </TableCell>
-                </TableRow>
               </TableBody>
             </Table>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-4 flex justify-end">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

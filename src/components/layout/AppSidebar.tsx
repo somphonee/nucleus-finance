@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import daecLogo from "@/assets/daec-logo.png";
-import { 
-  DollarSign, 
-  Users, 
-  PieChart, 
-  CreditCard, 
-  FileText, 
+import {
+  DollarSign,
+  Users,
+  PieChart,
+  CreditCard,
+  FileText,
   BarChart3,
   Home,
   Settings,
@@ -65,7 +65,7 @@ const provinceAccountingItems = [
 ];
 
 const systemItems = [
-    { title: "nav.cooperativeRegistration", url: "/cooperatives", icon: FileCheck, roles: ['admin'] },
+  { title: "nav.cooperativeRegistration", url: "/cooperatives", icon: FileCheck, roles: ['admin', 'userprovince'] },
   { title: "nav.userManagement", url: "/user-management", icon: UserCog, adminOnly: true },
   { title: "nav.categories", url: "/categories", icon: Tags, adminOnly: true },
   { title: "nav.organizations", url: "/organizations", icon: MapPin, adminOnly: true },
@@ -85,8 +85,8 @@ export function AppSidebar() {
   const menuRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   // Filter menu items based on user role
-  const displayedNavigationItems = user?.role === "userprovince" 
-    ? provinceAccountingItems 
+  const displayedNavigationItems = user?.role === "userprovince"
+    ? provinceAccountingItems
     : navigationItems;
 
   // Filter system items based on user role
@@ -102,13 +102,13 @@ export function AppSidebar() {
 
   const isActive = (path: string) => currentPath === path;
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
-    isActive 
-      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" 
+    isActive
+      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
       : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors";
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const allItems = [...displayedNavigationItems, ...filteredSystemItems];
-    
+
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       const nextIndex = focusedIndex < allItems.length - 1 ? focusedIndex + 1 : 0;
@@ -126,7 +126,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar 
+    <Sidebar
       className={`${collapsed ? "w-16" : "w-64"} transition-all duration-300 bg-sidebar border-r border-sidebar-border`}
       collapsible="icon"
     >
@@ -165,11 +165,11 @@ export function AppSidebar() {
               {displayedNavigationItems.map((item, index) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink 
+                    <NavLink
                       ref={(el) => (menuRefs.current[index] = el)}
-                      to={item.url} 
-                      end 
-                      className={({ isActive }) => 
+                      to={item.url}
+                      end
+                      className={({ isActive }) =>
                         `flex items-center ${collapsed ? 'justify-center' : 'space-x-3'} px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
                       }
                       tabIndex={0}
@@ -196,18 +196,18 @@ export function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                       <NavLink 
-                         ref={(el) => (menuRefs.current[globalIndex] = el)}
-                         to={item.url} 
-                         className={({ isActive }) => 
-                           `flex items-center ${collapsed ? 'justify-center' : 'space-x-3'} px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
-                         }
-                         tabIndex={0}
-                         onFocus={() => setFocusedIndex(globalIndex)}
-                       >
-                         <item.icon className="w-5 h-5 flex-shrink-0" />
-                         {!collapsed && <span className="font-medium">{t(item.title)}</span>}
-                       </NavLink>
+                      <NavLink
+                        ref={(el) => (menuRefs.current[globalIndex] = el)}
+                        to={item.url}
+                        className={({ isActive }) =>
+                          `flex items-center ${collapsed ? 'justify-center' : 'space-x-3'} px-3 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-sidebar-ring ${getNavClass({ isActive })}`
+                        }
+                        tabIndex={0}
+                        onFocus={() => setFocusedIndex(globalIndex)}
+                      >
+                        <item.icon className="w-5 h-5 flex-shrink-0" />
+                        {!collapsed && <span className="font-medium">{t(item.title)}</span>}
+                      </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

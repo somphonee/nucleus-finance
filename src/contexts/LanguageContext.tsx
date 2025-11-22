@@ -32,7 +32,7 @@ const translations = {
     'nav.categories': 'Categories',
     'nav.organizations': 'Organizations',
     'nav.auditLogs': 'Audit Logs',
-    'nav.cooperativeRegistration': 'Cooperative Registration',
+    'nav.cooperativeRegistration': 'Cooperative',
 
     // Dashboard
     'dashboard.title': 'Financial Dashboard',
@@ -257,7 +257,7 @@ const translations = {
     'nav.categories': 'ປະເພດລາຍຮັບ-ລາຍຈ່າຍ',
     'nav.organizations': 'ອົງກອນ ແລະ ແຂວງ',
     'nav.auditLogs': 'ບັນທຶກການກວດສອບ',
-    'nav.cooperativeRegistration': 'ລົງທະບຽນສະຫະກອນ',
+    'nav.cooperativeRegistration': 'ທະບຽນສະຫະກອນ',
 
     // Dashboard
     'dashboard.title': 'ໜ້າຫຼັກການເງິນ',

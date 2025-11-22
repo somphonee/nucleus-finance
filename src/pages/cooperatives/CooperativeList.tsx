@@ -85,9 +85,17 @@ export default function CooperativeList() {
         page_size: 10,
         search: searchTerm,
       });
-      setCertificates(response.data);
-      if (response.meta) {
-        setTotalPages(response.meta.total_pages);
+
+      // Filter for province users - only show their own cooperative (first one)
+      if (user?.role === 'userprovince') {
+        const provinceCooperative = response.data.slice(0, 1); // Only show the first cooperative
+        setCertificates(provinceCooperative);
+        setTotalPages(1); // Only one page for province users
+      } else {
+        setCertificates(response.data);
+        if (response.meta) {
+          setTotalPages(response.meta.total_pages);
+        }
       }
     } catch (error) {
       toast({

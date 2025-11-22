@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Download, Plus, Search, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { mockCashbookAPI, CashTransaction } from "@/lib/mockData/cashbook";
 import {
   Pagination,
   PaginationContent,
@@ -23,29 +24,29 @@ export default function Cashbook() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDate, setFilterDate] = useState("");
-  const [selectedProvince, setSelectedProvince] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [transactions, setTransactions] = useState<CashTransaction[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data - includes multiple provinces
-  const allTransactions = [
-    { id: 1, date: "2025-01-15", description: "ຮັບເງິນຈາກສະມາຊິກ", income: 5000000, expense: 0, balance: 5000000, province: "ວຽງຈັນ" },
-    { id: 2, date: "2025-01-16", description: "ຈ່າຍຄ່າໃຊ້ຈ່າຍສຳນັກງານ", income: 0, expense: 500000, balance: 4500000, province: "ວຽງຈັນ" },
-    { id: 3, date: "2025-01-17", description: "ຮັບເງິນຄືນເງິນກູ້", income: 2000000, expense: 0, balance: 6500000, province: "ວຽງຈັນ" },
-    { id: 4, date: "2025-01-15", description: "ຮັບເງິນຈາກສະມາຊິກ", income: 3000000, expense: 0, balance: 3000000, province: "ຫຼວງພະບາງ" },
-    { id: 5, date: "2025-01-16", description: "ຈ່າຍຄ່າໃຊ້ຈ່າຍ", income: 0, expense: 300000, balance: 2700000, province: "ຫຼວງພະບາງ" },
-  ];
-
-  // Filter transactions based on user role
-  const transactions = useMemo(() => {
-    if (user?.role === 'userprovince' && user?.province) {
-      return allTransactions.filter(t => t.province === user.province);
-    }
-    if (selectedProvince !== 'all') {
-      return allTransactions.filter(t => t.province === selectedProvince);
-    }
-    return allTransactions;
-  }, [user, selectedProvince]);
+  // Load mock data
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const response = await mockCashbookAPI.getTransactions();
+        setTransactions(response.data);
+      } catch (error) {
+        toast({
+          title: "ຜິດພາດ",
+          description: "ບໍ່ສາມາດໂຫຼດຂໍ້ມູນໄດ້",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
 
   // Pagination
   const totalPages = Math.ceil(transactions.length / itemsPerPage);
@@ -75,7 +76,9 @@ export default function Cashbook() {
             <CardTitle className="text-sm font-medium">ຍອດເງິນສົດ</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-balance">6,500,000 ກີບ</div>
+            <div className="text-2xl font-bold text-balance">
+              {transactions.length > 0 ? transactions[transactions.length - 1].balance.toLocaleString() : '0'} ກີບ
+            </div>
             <p className="text-xs text-muted-foreground">ຍອດເງິນປັດຈຸບັນ</p>
           </CardContent>
         </Card>
@@ -85,7 +88,9 @@ export default function Cashbook() {
             <CardTitle className="text-sm font-medium">ລາຍຮັບ</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-income">7,000,000 ກີບ</div>
+            <div className="text-2xl font-bold text-income">
+              {transactions.reduce((sum, t) => sum + t.income, 0).toLocaleString()} ກີບ
+            </div>
             <p className="text-xs text-muted-foreground">ເດືອນນີ້</p>
           </CardContent>
         </Card>
@@ -95,7 +100,9 @@ export default function Cashbook() {
             <CardTitle className="text-sm font-medium">ລາຍຈ່າຍ</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-expense">500,000 ກີບ</div>
+            <div className="text-2xl font-bold text-expense">
+              {transactions.reduce((sum, t) => sum + t.expense, 0).toLocaleString()} ກີບ
+            </div>
             <p className="text-xs text-muted-foreground">ເດືອນນີ້</p>
           </CardContent>
         </Card>
@@ -180,23 +187,7 @@ export default function Cashbook() {
                 onChange={(e) => setFilterDate(e.target.value)}
                 className="w-auto"
               />
-              {user?.role === 'admin' && (
-                <Select value={selectedProvince} onValueChange={setSelectedProvince}>
-                  <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="ເລືອກແຂວງ" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">ທັງໝົດ</SelectItem>
-                    <SelectItem value="ວຽງຈັນ">ວຽງຈັນ</SelectItem>
-                    <SelectItem value="ຫຼວງພະບາງ">ຫຼວງພະບາງ</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-              {user?.role === 'userprovince' && user?.province && (
-                <div className="px-4 py-2 bg-muted rounded-md text-sm font-medium">
-                  {user.province}
-                </div>
-              )}
+
             </div>
           </div>
 
@@ -207,7 +198,7 @@ export default function Cashbook() {
                 <TableRow>
                   <TableHead>ວັນທີ</TableHead>
                   <TableHead>ລາຍລະອຽດ</TableHead>
-                  <TableHead>ແຂວງ</TableHead>
+                  <TableHead>ປະເພດ</TableHead>
                   <TableHead className="text-right">ລາຍຮັບ</TableHead>
                   <TableHead className="text-right">ລາຍຈ່າຍ</TableHead>
                   <TableHead className="text-right">ຍອດເງິນ</TableHead>
@@ -219,7 +210,7 @@ export default function Cashbook() {
                   <TableRow key={transaction.id}>
                     <TableCell>{transaction.date}</TableCell>
                     <TableCell>{transaction.description}</TableCell>
-                    <TableCell>{transaction.province}</TableCell>
+                    <TableCell>{transaction.category}</TableCell>
                     <TableCell className="text-right text-income font-medium">
                       {transaction.income > 0 ? transaction.income.toLocaleString() : "-"}
                     </TableCell>
