@@ -41,7 +41,7 @@ export function TopBar() {
   return (
     <header className="h-16 bg-card border-b border-card-border px-6 flex items-center justify-between">
       <div className="flex items-center space-x-4 flex-1">
-        {/* <SidebarTrigger className="md:hidden" /> */}
+        <SidebarTrigger className="md:hidden" />
         <div className="relative max-w-md flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
