@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authAPI } from '@/lib/api';
 
-export type UserRole = 'admin' | 'user' | 'userprovince';
+export type UserRole = 'admin' | 'user' | 'userprovince' | 'superAdmin';
 
 export interface User {
   id: string;
@@ -18,6 +18,7 @@ interface AuthContextType {
   logout: () => void;
   loginBypass: () => void;
   loginBypassProvince: () => void;
+  loginBypassSuperAdmin: () => void;
   isAuthenticated: boolean;
 }
 
@@ -111,6 +112,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('authToken', 'bypass-province-token');
   };
 
+  const loginBypassSuperAdmin = () => {
+    const mockUser: User = {
+      id: 'bypass-superadmin-user',
+      email: 'superadmin@daec.com',
+      name: 'Demo SuperAdmin User',
+      role: 'superAdmin',
+      province: 'All Provinces',
+    };
+    setUser(mockUser);
+    localStorage.setItem('user', JSON.stringify(mockUser));
+    localStorage.setItem('authToken', 'bypass-superadmin-token');
+  };
+
   const logout = () => {
     authAPI.logout();
     setUser(null);
@@ -134,6 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logout,
     loginBypass,
     loginBypassProvince,
+    loginBypassSuperAdmin,
     isAuthenticated: authAPI.isAuthenticated()
   };
 

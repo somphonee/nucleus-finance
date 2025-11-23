@@ -18,6 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { RowsPerPageSelector } from "@/components/ui/rows-per-page-selector";
 
 export default function Cashbook() {
   const { toast } = useToast();
@@ -25,7 +26,7 @@ export default function Cashbook() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [transactions, setTransactions] = useState<CashTransaction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -231,8 +232,15 @@ export default function Cashbook() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-4 flex justify-end">
-              <Pagination>
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <RowsPerPageSelector
+                value={itemsPerPage}
+                onValueChange={(value) => {
+                  setItemsPerPage(value);
+                  setCurrentPage(1);
+                }}
+              />
+              <Pagination className="justify-end">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious

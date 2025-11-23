@@ -85,12 +85,17 @@ export function AppSidebar() {
   const menuRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   // Filter menu items based on user role
-  const displayedNavigationItems = user?.role === "userprovince"
-    ? provinceAccountingItems
-    : navigationItems;
+  let displayedNavigationItems = navigationItems;
+  if (user?.role === "userprovince") {
+    displayedNavigationItems = provinceAccountingItems;
+  } else if (user?.role === "superAdmin") {
+    displayedNavigationItems = [...navigationItems, ...provinceAccountingItems];
+  }
 
   // Filter system items based on user role
   const filteredSystemItems = systemItems.filter(item => {
+    if (user?.role === 'superAdmin') return true;
+
     if ('adminOnly' in item && item.adminOnly) {
       return user?.role === "admin";
     }

@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { RowsPerPageSelector } from "@/components/ui/rows-per-page-selector";
 import { mockDailyLedgerAPI, DailyLedgerEntry } from "@/lib/mockData/dailyLedger";
 
 export default function DailyLedger() {
   const [entries, setEntries] = useState<DailyLedgerEntry[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     const loadData = async () => {
@@ -102,8 +103,15 @@ export default function DailyLedger() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-4 flex justify-end">
-              <Pagination>
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <RowsPerPageSelector
+                value={itemsPerPage}
+                onValueChange={(value) => {
+                  setItemsPerPage(value);
+                  setCurrentPage(1);
+                }}
+              />
+              <Pagination className="justify-end">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious

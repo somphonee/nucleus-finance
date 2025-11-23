@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -14,17 +14,8 @@ import { UserRole } from "@/contexts/AuthContext";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  status: 'active' | 'inactive';
-  createdAt: string;
-  lastLogin?: string;
-  allowedMenus?: string[];
-}
+import { RowsPerPageSelector } from "@/components/ui/rows-per-page-selector";
+import { mockUsersAPI, User } from "@/lib/mockData/users";
 
 // Available menu options
 const MENU_OPTIONS = [
@@ -45,53 +36,16 @@ const MENU_OPTIONS = [
   { id: 'financial-report', label: 'Financial Report' },
 ];
 
-const initialUsers: User[] = [
-  {
-    id: '1',
-    name: 'Admin User',
-    email: 'admin@company.com',
-    role: 'admin',
-    status: 'active',
-    createdAt: '2024-01-01',
-    lastLogin: '2024-03-15'
-  },
-  {
-    id: '2',
-    name: 'Regular User',
-    email: 'user@company.com',
-    role: 'user',
-    status: 'active',
-    createdAt: '2024-01-15',
-    lastLogin: '2024-03-14'
-  },
-  {
-    id: '3',
-    name: 'Province User',
-    email: 'userprovince@company.com',
-    role: 'userprovince',
-    status: 'active',
-    createdAt: '2024-02-01',
-    lastLogin: '2024-03-13'
-  },
-  {
-    id: '4',
-    name: 'John Doe',
-    email: 'john.doe@company.com',
-    role: 'user',
-    status: 'inactive',
-    createdAt: '2024-02-15'
-  }
-];
-
 export default function UserManagement() {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState<string>("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -101,66 +55,99 @@ export default function UserManagement() {
   });
   const { toast } = useToast();
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = selectedRole === "all" || user.role === selectedRole;
-    return matchesSearch && matchesRole;
-  });
-
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-  const paginatedUsers = filteredUsers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const handleAddUser = () => {
-    const newUser: User = {
-      id: Date.now().toString(),
-      name: formData.name,
-      email: formData.email,
-      role: formData.role,
-      status: formData.status,
-      createdAt: new Date().toISOString().split('T')[0],
-      allowedMenus: formData.allowedMenus
-    };
-
-    setUsers([...users, newUser]);
-    setIsAddDialogOpen(false);
-    setFormData({ name: "", email: "", role: "user", status: "active", allowedMenus: [] });
-    toast({
-      title: "User Added",
-      description: `${newUser.name} has been added successfully.`
-    });
+  const loadUsers = async () => {
+    try {
+      const response = await mockUsersAPI.getUsers({
+        page: currentPage,
+        pageSize: itemsPerPage,
+        search: searchTerm,
+        role: selectedRole
+      });
+      setUsers(response.data);
+      setTotalPages(response.meta.totalPages);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load users",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handleEditUser = () => {
+  useEffect(() => {
+    loadUsers();
+  }, [currentPage, itemsPerPage, searchTerm, selectedRole]);
+
+  const handleAddUser = async () => {
+    try {
+      await mockUsersAPI.createUser({
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        status: formData.status,
+        allowedMenus: formData.allowedMenus
+      });
+
+      loadUsers();
+      setIsAddDialogOpen(false);
+      setFormData({ name: "", email: "", role: "user", status: "active", allowedMenus: [] });
+      toast({
+        title: "User Added",
+        description: "User has been added successfully."
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add user",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleEditUser = async () => {
     if (!editingUser) return;
 
-    const updatedUsers = users.map(user =>
-      user.id === editingUser.id
-        ? { ...user, name: formData.name, email: formData.email, role: formData.role, status: formData.status, allowedMenus: formData.allowedMenus }
-        : user
-    );
+    try {
+      await mockUsersAPI.updateUser(editingUser.id, {
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        status: formData.status,
+        allowedMenus: formData.allowedMenus
+      });
 
-    setUsers(updatedUsers);
-    setIsEditDialogOpen(false);
-    setEditingUser(null);
-    setFormData({ name: "", email: "", role: "user", status: "active", allowedMenus: [] });
-    toast({
-      title: "User Updated",
-      description: "User information has been updated successfully."
-    });
+      loadUsers();
+      setIsEditDialogOpen(false);
+      setEditingUser(null);
+      setFormData({ name: "", email: "", role: "user", status: "active", allowedMenus: [] });
+      toast({
+        title: "User Updated",
+        description: "User information has been updated successfully."
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update user",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handleDeleteUser = (userId: string) => {
-    const userToDelete = users.find(user => user.id === userId);
-    setUsers(users.filter(user => user.id !== userId));
-    toast({
-      title: "User Deleted",
-      description: `${userToDelete?.name} has been deleted successfully.`
-    });
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      await mockUsersAPI.deleteUser(userId);
+      loadUsers();
+      toast({
+        title: "User Deleted",
+        description: "User has been deleted successfully."
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete user",
+        variant: "destructive"
+      });
+    }
   };
 
   const openEditDialog = (user: User) => {
@@ -211,7 +198,7 @@ export default function UserManagement() {
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">User Management</h1>
           <p className="text-muted-foreground text-sm sm:text-base">Manage system users and their roles</p>
         </div>
-        
+
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -226,7 +213,7 @@ export default function UserManagement() {
                 Create a new user account with appropriate role and permissions.
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="add-name">Full Name</Label>
@@ -237,7 +224,7 @@ export default function UserManagement() {
                   placeholder="Enter full name"
                 />
               </div>
-              
+
               <div className="grid gap-2">
                 <Label htmlFor="add-email">Email</Label>
                 <Input
@@ -248,7 +235,7 @@ export default function UserManagement() {
                   placeholder="Enter email address"
                 />
               </div>
-              
+
               <div className="grid gap-2">
                 <Label htmlFor="add-role">Role</Label>
                 <Select value={formData.role} onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}>
@@ -262,7 +249,7 @@ export default function UserManagement() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="grid gap-2">
                 <Label htmlFor="add-status">Status</Label>
                 <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({ ...formData, status: value })}>
@@ -309,7 +296,7 @@ export default function UserManagement() {
                 </ScrollArea>
               </div>
             </div>
-            
+
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                 Cancel
@@ -328,7 +315,7 @@ export default function UserManagement() {
           <CardDescription>
             Manage user accounts, roles, and permissions
           </CardDescription>
-          
+
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
             <div className="relative flex-1 sm:max-w-sm">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -339,7 +326,7 @@ export default function UserManagement() {
                 className="pl-8"
               />
             </div>
-            
+
             <Select value={selectedRole} onValueChange={setSelectedRole}>
               <SelectTrigger className="w-full sm:w-48">
                 <SelectValue placeholder="Filter by role" />
@@ -353,7 +340,7 @@ export default function UserManagement() {
             </Select>
           </div>
         </CardHeader>
-        
+
         <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
@@ -368,7 +355,7 @@ export default function UserManagement() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedUsers.map((user) => (
+              {users.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
@@ -393,7 +380,7 @@ export default function UserManagement() {
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      
+
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="outline" size="sm">
@@ -421,30 +408,37 @@ export default function UserManagement() {
               ))}
             </TableBody>
           </Table>
-          
+
           {totalPages > 1 && (
-            <div className="mt-4">
-              <Pagination>
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <RowsPerPageSelector
+                value={itemsPerPage}
+                onValueChange={(value) => {
+                  setItemsPerPage(value);
+                  setCurrentPage(1);
+                }}
+              />
+              <Pagination className="justify-end">
                 <PaginationContent>
                   <PaginationItem>
-                    <PaginationPrevious 
+                    <PaginationPrevious
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                     />
                   </PaginationItem>
-                  {[...Array(totalPages)].map((_, i) => (
-                    <PaginationItem key={i}>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
                       <PaginationLink
-                        onClick={() => setCurrentPage(i + 1)}
-                        isActive={currentPage === i + 1}
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
                         className="cursor-pointer"
                       >
-                        {i + 1}
+                        {page}
                       </PaginationLink>
                     </PaginationItem>
                   ))}
                   <PaginationItem>
-                    <PaginationNext 
+                    <PaginationNext
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
                     />
@@ -465,7 +459,7 @@ export default function UserManagement() {
               Update user information and permissions.
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="edit-name">Full Name</Label>
@@ -476,7 +470,7 @@ export default function UserManagement() {
                 placeholder="Enter full name"
               />
             </div>
-            
+
             <div className="grid gap-2">
               <Label htmlFor="edit-email">Email</Label>
               <Input
@@ -487,7 +481,7 @@ export default function UserManagement() {
                 placeholder="Enter email address"
               />
             </div>
-            
+
             <div className="grid gap-2">
               <Label htmlFor="edit-role">Role</Label>
               <Select value={formData.role} onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}>
@@ -501,7 +495,7 @@ export default function UserManagement() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="grid gap-2">
               <Label htmlFor="edit-status">Status</Label>
               <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({ ...formData, status: value })}>
@@ -548,7 +542,7 @@ export default function UserManagement() {
               </ScrollArea>
             </div>
           </div>
-          
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancel

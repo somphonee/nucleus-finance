@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Download, Filter, Eye, AlertCircle, CheckCircle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,145 +21,37 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-interface AuditLog {
-  id: string;
-  timestamp: string;
-  user: string;
-  action: string;
-  module: string;
-  details: string;
-  ipAddress: string;
-  status: "success" | "warning" | "error";
-}
-
-const mockAuditLogs: AuditLog[] = [
-  {
-    id: "1",
-    timestamp: "2024-12-15 14:23:45",
-    user: "admin@example.la",
-    action: "Create Transaction",
-    module: "Cash Management",
-    details: "Added cash inflow transaction: Member Savings Deposit - ₭150,000",
-    ipAddress: "192.168.1.100",
-    status: "success",
-  },
-  {
-    id: "2",
-    timestamp: "2024-12-15 14:15:12",
-    user: "province.vte@example.la",
-    action: "Update Member",
-    module: "Member Savings",
-    details: "Updated member profile: MB-001 - Changed contact information",
-    ipAddress: "192.168.1.105",
-    status: "success",
-  },
-  {
-    id: "3",
-    timestamp: "2024-12-15 13:45:30",
-    user: "admin@example.la",
-    action: "Delete Category",
-    module: "Categories",
-    details: "Attempted to delete active category: EXP-010",
-    ipAddress: "192.168.1.100",
-    status: "warning",
-  },
-  {
-    id: "4",
-    timestamp: "2024-12-15 13:30:22",
-    user: "province.lpb@example.la",
-    action: "Login",
-    module: "Authentication",
-    details: "User logged in successfully",
-    ipAddress: "192.168.2.50",
-    status: "success",
-  },
-  {
-    id: "5",
-    timestamp: "2024-12-15 13:20:15",
-    user: "unknown@example.la",
-    action: "Login Failed",
-    module: "Authentication",
-    details: "Failed login attempt - Invalid credentials",
-    ipAddress: "192.168.3.100",
-    status: "error",
-  },
-  {
-    id: "6",
-    timestamp: "2024-12-15 12:50:33",
-    user: "admin@example.la",
-    action: "Export Report",
-    module: "Reports",
-    details: "Exported Financial Report to PDF",
-    ipAddress: "192.168.1.100",
-    status: "success",
-  },
-  {
-    id: "7",
-    timestamp: "2024-12-15 12:30:18",
-    user: "province.svk@example.la",
-    action: "Create Loan",
-    module: "Loan Management",
-    details: "Created new loan: LOAN-2024-089 - Member MB-156 - ₭5,000,000",
-    ipAddress: "192.168.4.75",
-    status: "success",
-  },
-  {
-    id: "8",
-    timestamp: "2024-12-15 11:45:55",
-    user: "admin@example.la",
-    action: "Update Settings",
-    module: "Settings",
-    details: "Changed system settings: Interest rate calculation method",
-    ipAddress: "192.168.1.100",
-    status: "success",
-  },
-  {
-    id: "9",
-    timestamp: "2024-12-15 11:20:40",
-    user: "province.cpv@example.la",
-    action: "Bank Reconciliation",
-    module: "Bank Book",
-    details: "Completed bank reconciliation for BCEL account ending in 1234",
-    ipAddress: "192.168.5.90",
-    status: "success",
-  },
-  {
-    id: "10",
-    timestamp: "2024-12-15 10:55:28",
-    user: "admin@example.la",
-    action: "Create User",
-    module: "User Management",
-    details: "Created new user account: province.vientiane@example.la",
-    ipAddress: "192.168.1.100",
-    status: "success",
-  },
-];
+import { RowsPerPageSelector } from "@/components/ui/rows-per-page-selector";
+import { mockAuditLogsAPI, AuditLog } from "@/lib/mockData/auditLogs";
 
 const AuditLogs = () => {
+  const [logs, setLogs] = useState<AuditLog[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterModule, setFilterModule] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const filteredLogs = mockAuditLogs.filter((log) => {
-    const matchesSearch =
-      log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.details.toLowerCase().includes(searchTerm.toLowerCase());
+  const loadLogs = async () => {
+    try {
+      const response = await mockAuditLogsAPI.getLogs({
+        page: currentPage,
+        pageSize: itemsPerPage,
+        search: searchTerm,
+        module: filterModule,
+        status: filterStatus,
+      });
+      setLogs(response.data);
+      setTotalPages(response.meta.totalPages);
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to load audit logs", variant: "destructive" });
+    }
+  };
 
-    const matchesModule = filterModule === "all" || log.module === filterModule;
-    const matchesStatus = filterStatus === "all" || log.status === filterStatus;
-
-    return matchesSearch && matchesModule && matchesStatus;
-  });
-
-  const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
-  const paginatedLogs = filteredLogs.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  useEffect(() => {
+    loadLogs();
+  }, [currentPage, itemsPerPage, searchTerm, filterModule, filterStatus]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -187,9 +79,10 @@ const AuditLogs = () => {
     }
   };
 
-  const successCount = mockAuditLogs.filter(log => log.status === "success").length;
-  const warningCount = mockAuditLogs.filter(log => log.status === "warning").length;
-  const errorCount = mockAuditLogs.filter(log => log.status === "error").length;
+  // Note: Stats are calculated based on the current page data, which is a limitation of the mock API not returning global stats.
+  const successCount = logs.filter(log => log.status === "success").length;
+  const warningCount = logs.filter(log => log.status === "warning").length;
+  const errorCount = logs.filter(log => log.status === "error").length;
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -218,7 +111,8 @@ const AuditLogs = () => {
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Events</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-foreground">{mockAuditLogs.length}</p>
+            {/* Using totalPages * itemsPerPage as a rough estimate or placeholder */}
+            <p className="text-2xl font-bold text-foreground">{totalPages * itemsPerPage}</p>
           </CardContent>
         </Card>
         <Card>
@@ -319,7 +213,7 @@ const AuditLogs = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {paginatedLogs.map((log) => (
+                {logs.map((log) => (
                   <TableRow key={log.id}>
                     <TableCell className="font-mono text-sm whitespace-nowrap">
                       {log.timestamp}
@@ -356,7 +250,7 @@ const AuditLogs = () => {
               </TableBody>
             </Table>
           </div>
-          {filteredLogs.length === 0 && (
+          {logs.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               No audit logs found matching your filters
             </div>
@@ -364,8 +258,15 @@ const AuditLogs = () => {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-4 flex justify-end">
-              <Pagination>
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <RowsPerPageSelector
+                value={itemsPerPage}
+                onValueChange={(value) => {
+                  setItemsPerPage(value);
+                  setCurrentPage(1);
+                }}
+              />
+              <Pagination className="justify-end">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious

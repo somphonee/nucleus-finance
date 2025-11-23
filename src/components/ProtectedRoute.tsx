@@ -16,7 +16,8 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
   }
 
   // Check role permissions if specified
-  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+  // Allow superAdmin to access everything
+  if (allowedRoles && user && user.role !== 'superAdmin' && !allowedRoles.includes(user.role)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">

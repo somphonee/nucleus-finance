@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Download, Filter, BookOpen } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { RowsPerPageSelector } from "@/components/ui/rows-per-page-selector";
 
 interface LedgerEntry {
   id: string;
@@ -65,6 +67,27 @@ export default function GeneralLedger() {
       balance: 16500000,
       reference: "EXP001",
     },
+    // Mock data for pagination
+    {
+      id: "5",
+      date: "2024-02-05",
+      description: "Utility bill payment",
+      account: 'expenditure',
+      debit: 0,
+      credit: 150000,
+      balance: 16350000,
+      reference: "EXP002",
+    },
+    {
+      id: "6",
+      date: "2024-02-10",
+      description: "New member registration",
+      account: 'income',
+      debit: 500000,
+      credit: 0,
+      balance: 16850000,
+      reference: "INC001",
+    },
   ]);
 
   const [newEntry, setNewEntry] = useState({
@@ -78,6 +101,8 @@ export default function GeneralLedger() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [filterAccount, setFilterAccount] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const handleAddEntry = () => {
     if (newEntry.date && newEntry.description && newEntry.account && (newEntry.debit || newEntry.credit)) {
@@ -96,7 +121,7 @@ export default function GeneralLedger() {
         balance: newBalance,
         reference: newEntry.reference,
       };
-      
+
       setEntries([...entries, entry]);
       setNewEntry({ date: "", description: "", account: "", debit: "", credit: "", reference: "" });
       setIsDialogOpen(false);
@@ -143,6 +168,14 @@ export default function GeneralLedger() {
     { value: 'expenditure', label: t('ledger.expenditure') },
   ];
 
+  // Pagination calculations
+  const filteredEntries = getFilteredEntries();
+  const totalPages = Math.ceil(filteredEntries.length / itemsPerPage);
+  const paginatedEntries = filteredEntries.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -180,7 +213,7 @@ export default function GeneralLedger() {
                     id="entryDate"
                     type="date"
                     value={newEntry.date}
-                    onChange={(e) => setNewEntry({...newEntry, date: e.target.value})}
+                    onChange={(e) => setNewEntry({ ...newEntry, date: e.target.value })}
                     className="col-span-3"
                   />
                 </div>
@@ -191,7 +224,7 @@ export default function GeneralLedger() {
                   <Input
                     id="entryDescription"
                     value={newEntry.description}
-                    onChange={(e) => setNewEntry({...newEntry, description: e.target.value})}
+                    onChange={(e) => setNewEntry({ ...newEntry, description: e.target.value })}
                     className="col-span-3"
                     placeholder="Transaction description"
                   />
@@ -200,7 +233,7 @@ export default function GeneralLedger() {
                   <Label htmlFor="entryAccount" className="text-right">
                     Account
                   </Label>
-                  <Select value={newEntry.account} onValueChange={(value) => setNewEntry({...newEntry, account: value})}>
+                  <Select value={newEntry.account} onValueChange={(value) => setNewEntry({ ...newEntry, account: value })}>
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Select account" />
                     </SelectTrigger>
@@ -221,7 +254,7 @@ export default function GeneralLedger() {
                     id="entryDebit"
                     type="number"
                     value={newEntry.debit}
-                    onChange={(e) => setNewEntry({...newEntry, debit: e.target.value})}
+                    onChange={(e) => setNewEntry({ ...newEntry, debit: e.target.value })}
                     className="col-span-3"
                     placeholder="0"
                   />
@@ -234,7 +267,7 @@ export default function GeneralLedger() {
                     id="entryCredit"
                     type="number"
                     value={newEntry.credit}
-                    onChange={(e) => setNewEntry({...newEntry, credit: e.target.value})}
+                    onChange={(e) => setNewEntry({ ...newEntry, credit: e.target.value })}
                     className="col-span-3"
                     placeholder="0"
                   />
@@ -246,7 +279,7 @@ export default function GeneralLedger() {
                   <Input
                     id="entryReference"
                     value={newEntry.reference}
-                    onChange={(e) => setNewEntry({...newEntry, reference: e.target.value})}
+                    onChange={(e) => setNewEntry({ ...newEntry, reference: e.target.value })}
                     className="col-span-3"
                     placeholder="REF001"
                   />
@@ -280,7 +313,7 @@ export default function GeneralLedger() {
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Credits</CardTitle>
@@ -317,11 +350,14 @@ export default function GeneralLedger() {
           <TabsTrigger value="entries">All Entries</TabsTrigger>
           <TabsTrigger value="accounts">Account Balances</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="entries" className="space-y-4">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4" />
-            <Select value={filterAccount} onValueChange={setFilterAccount}>
+            <Select value={filterAccount} onValueChange={(value) => {
+              setFilterAccount(value);
+              setCurrentPage(1); // Reset to first page on filter change
+            }}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Filter by account" />
               </SelectTrigger>
@@ -357,7 +393,7 @@ export default function GeneralLedger() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {getFilteredEntries().map((entry) => (
+                  {paginatedEntries.map((entry) => (
                     <TableRow key={entry.id}>
                       <TableCell>{new Date(entry.date).toLocaleDateString()}</TableCell>
                       <TableCell>{entry.description}</TableCell>
@@ -374,6 +410,45 @@ export default function GeneralLedger() {
                   ))}
                 </TableBody>
               </Table>
+
+              {totalPages > 1 && (
+                <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <RowsPerPageSelector
+                    value={itemsPerPage}
+                    onValueChange={(value) => {
+                      setItemsPerPage(value);
+                      setCurrentPage(1);
+                    }}
+                  />
+                  <Pagination className="justify-end">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                      {[...Array(totalPages)].map((_, i) => (
+                        <PaginationItem key={i}>
+                          <PaginationLink
+                            onClick={() => setCurrentPage(i + 1)}
+                            isActive={currentPage === i + 1}
+                            className="cursor-pointer"
+                          >
+                            {i + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem>
+                        <PaginationNext
+                          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

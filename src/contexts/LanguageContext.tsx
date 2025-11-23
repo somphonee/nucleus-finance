@@ -36,10 +36,16 @@ const translations = {
 
     // Dashboard
     'dashboard.title': 'Financial Dashboard',
+    'dashboard.subtitle': 'Overview of your financial operations',
     'dashboard.totalCash': 'Total Cash',
+    'dashboard.desc.cash': 'Current cash balance',
     'dashboard.totalSavings': 'Total Savings',
+    'dashboard.desc.savings': 'Total member savings',
     'dashboard.totalShares': 'Total Shares',
     'dashboard.activeLoans': 'Active Loans',
+    'dashboard.desc.loans': 'Active loan accounts',
+    'dashboard.activeMembers': 'Active Members',
+    'dashboard.desc.members': 'Total active members',
     'dashboard.quickActions': 'Quick Actions',
     'dashboard.addTransaction': 'Add Transaction',
     'dashboard.newMember': 'New Member',
@@ -67,6 +73,11 @@ const translations = {
     'common.name': 'Name',
     'common.id': 'ID',
     'common.type': 'Type',
+    'common.previous': 'Previous',
+    'common.next': 'Next',
+    'common.rowsPerPage': 'Rows per page',
+    'common.lastUpdated': 'Last updated',
+    'common.reference': 'Reference',
 
     // User Profile & Settings
     'userProfile': 'User Profile',
@@ -162,11 +173,15 @@ const translations = {
     'cash.inflow': 'Cash Inflow',
     'cash.outflow': 'Cash Outflow',
     'cash.runningBalance': 'Running Balance',
+    'cash.subtitle': 'Track daily cash inflows and outflows',
 
     // Member Savings
     'savings.title': 'Member Savings',
     'savings.addMember': 'Add New Member',
     'savings.membershipNumber': 'Membership Number',
+    'savings.subtitle': 'Manage member profiles and track savings deposits',
+    'savings.totalBalance': 'Total Savings Balance',
+    'savings.expectedInflow': 'Expected monthly inflow',
     'savings.deposit': 'Deposit',
     'savings.withdrawal': 'Withdrawal',
     'savings.carriedForward': 'Carried Forward',
@@ -177,6 +192,9 @@ const translations = {
     'shares.addContribution': 'Add Share Contribution',
     'shares.ownership': 'Ownership',
     'shares.contribution': 'Contribution',
+    'shares.ownershipSummary': 'Ownership Summary',
+    'shares.contributionHistory': 'Contribution History',
+    'shares.ownershipPercentage': 'Ownership %',
 
     // Loans
     'loans.title': 'Loan Management',
@@ -261,10 +279,16 @@ const translations = {
 
     // Dashboard
     'dashboard.title': 'ໜ້າຫຼັກການເງິນ',
+    'dashboard.subtitle': 'ພາບລວມການດຳເນີນງານທາງດ້ານການເງິນຂອງທ່ານ',
     'dashboard.totalCash': 'ເງິນສົດລວມ',
+    'dashboard.desc.cash': 'ຍອດເງິນສົດປັດຈຸບັນ',
     'dashboard.totalSavings': 'ເງິນຝາກລວມ',
+    'dashboard.desc.savings': 'ເງິນຝາກສະມາຊິກທັງໝົດ',
     'dashboard.totalShares': 'ຮຸ້ນລວມ',
     'dashboard.activeLoans': 'ເງິນກູ້ທີ່ໃຊ້ໄດ້',
+    'dashboard.desc.loans': 'ບັນຊີເງິນກູ້ທີ່ໃຊ້ງານຢູ່',
+    'dashboard.activeMembers': 'ສະມາຊິກທີ່ໃຊ້ງານຢູ່',
+    'dashboard.desc.members': 'ສະມາຊິກທີ່ໃຊ້ງານຢູ່ທັງໝົດ',
     'dashboard.quickActions': 'ການກະທຳດ່ວນ',
     'dashboard.addTransaction': 'ເພີ່ມລາຍການ',
     'dashboard.newMember': 'ສະມາຊິກໃໝ່',
@@ -291,6 +315,11 @@ const translations = {
     'common.name': 'ຊື່',
     'common.id': 'ລະຫັດ',
     'common.type': 'ປະເພດ',
+    'common.previous': 'ກ່ອນໜ້າ',
+    'common.next': 'ຕໍ່ໄປ',
+    'common.rowsPerPage': 'ແຖວຕໍ່ໜ້າ',
+    'common.lastUpdated': 'ອັບເດດລ່າສຸດ',
+    'common.reference': 'ເອກະສານອ້າງອີງ',
 
     // User Profile & Settings
     'userProfile': 'ໂປຣໄຟລ່ຜູ້ໃຊ້',
@@ -387,6 +416,7 @@ const translations = {
     'cash.inflow': 'ເງິນເຂົ້າ',
     'cash.outflow': 'ເງິນອອກ',
     'cash.runningBalance': 'ຍອດເຫຼືອປະຈຳ',
+    'cash.subtitle': 'ຕິດຕາມການໄຫຼເຂົ້າ ແລະ ໄຫຼອອກຂົງເງິນສົດປະຈຳວັນ',
 
     // Member Savings
     'savings.title': 'ເງິນຝາກສະມາຊິກ',
@@ -396,12 +426,18 @@ const translations = {
     'savings.withdrawal': 'ຖອນເງິນ',
     'savings.carriedForward': 'ຍອດຍົກມາ',
     'savings.monthlyDeposits': 'ເງິນຝາກລາຍເດືອນ',
+    'savings.subtitle': 'ຈັດການໂປຣໄຟລ້ສະມາຊິກ ແລະ ຕິດຕາມເງິນຝາກ',
+    'savings.totalBalance': 'ຍອດເງິນຝາກທັງໝົດ',
+    'savings.expectedInflow': 'ຄາດຄະເນເງິນເຂົ້າປະຈຳເດືອນ',
 
     // Shares
     'shares.title': 'ການຕິດຕາມຮຸ້ນ',
     'shares.addContribution': 'ເພີ່ມການປະກອບຮຸ້ນ',
     'shares.ownership': 'ການເປັນເຈົ້າຂອງ',
     'shares.contribution': 'ການປະກອບຮຸ້ນ',
+    'shares.ownershipSummary': 'ສະຫຼຸບການເປັນເຈົ້າຂອງ',
+    'shares.contributionHistory': 'ປະຫວັດການປະກອບສ່ວນ',
+    'shares.ownershipPercentage': '% ການເປັນເຈົ້າຂອງ',
 
     // Loans
     'loans.title': 'ການຈັດການກູ້ຢຶມ',

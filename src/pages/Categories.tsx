@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,30 +23,12 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-
-interface Category {
-  id: string;
-  code: string;
-  name: string;
-  type: "income" | "expense";
-  parentId?: string;
-  isActive: boolean;
-}
-
-const mockCategories: Category[] = [
-  { id: "1", code: "INC-001", name: "Member Savings", type: "income", isActive: true },
-  { id: "2", code: "INC-002", name: "Loan Interest", type: "income", isActive: true },
-  { id: "3", code: "INC-003", name: "Share Contributions", type: "income", isActive: true },
-  { id: "4", code: "INC-004", name: "Investment Returns", type: "income", isActive: true },
-  { id: "5", code: "EXP-001", name: "Staff Salaries", type: "expense", isActive: true },
-  { id: "6", code: "EXP-002", name: "Office Rent", type: "expense", isActive: true },
-  { id: "7", code: "EXP-003", name: "Utilities", type: "expense", isActive: true },
-  { id: "8", code: "EXP-004", name: "Office Supplies", type: "expense", isActive: true },
-  { id: "9", code: "EXP-005", name: "Administrative Expenses", type: "expense", isActive: true },
-];
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { RowsPerPageSelector } from "@/components/ui/rows-per-page-selector";
+import { mockCategoriesAPI, Category } from "@/lib/mockData/categories";
 
 const Categories = () => {
-  const [categories, setCategories] = useState<Category[]>(mockCategories);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [formData, setFormData] = useState({
@@ -55,16 +37,42 @@ const Categories = () => {
     type: "income" as "income" | "expense",
   });
 
-  const handleAdd = () => {
-    const newCategory: Category = {
-      id: Date.now().toString(),
-      ...formData,
-      isActive: true,
-    };
-    setCategories([...categories, newCategory]);
-    setIsDialogOpen(false);
-    resetForm();
-    toast({ title: "Success", description: "Category added successfully" });
+  // Pagination and Tab State
+  const [activeTab, setActiveTab] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const loadCategories = async () => {
+    try {
+      const response = await mockCategoriesAPI.getCategories({
+        page: currentPage,
+        pageSize: itemsPerPage,
+        type: activeTab === 'all' ? 'all' : activeTab as 'income' | 'expense'
+      });
+      setCategories(response.data);
+      setTotalPages(response.meta.totalPages);
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to load categories", variant: "destructive" });
+    }
+  };
+
+  useEffect(() => {
+    loadCategories();
+  }, [currentPage, itemsPerPage, activeTab]);
+
+  const handleAdd = async () => {
+    try {
+      await mockCategoriesAPI.createCategory({
+        ...formData,
+      });
+      loadCategories();
+      setIsDialogOpen(false);
+      resetForm();
+      toast({ title: "Success", description: "Category added successfully" });
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to add category", variant: "destructive" });
+    }
   };
 
   const handleEdit = (category: Category) => {
@@ -77,20 +85,28 @@ const Categories = () => {
     setIsDialogOpen(true);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (editingCategory) {
-      setCategories(categories.map(cat => 
-        cat.id === editingCategory.id ? { ...cat, ...formData } : cat
-      ));
-      setIsDialogOpen(false);
-      resetForm();
-      toast({ title: "Success", description: "Category updated successfully" });
+      try {
+        await mockCategoriesAPI.updateCategory(editingCategory.id, formData);
+        loadCategories();
+        setIsDialogOpen(false);
+        resetForm();
+        toast({ title: "Success", description: "Category updated successfully" });
+      } catch (error) {
+        toast({ title: "Error", description: "Failed to update category", variant: "destructive" });
+      }
     }
   };
 
-  const handleDelete = (id: string) => {
-    setCategories(categories.filter(cat => cat.id !== id));
-    toast({ title: "Success", description: "Category deleted successfully" });
+  const handleDelete = async (id: string) => {
+    try {
+      await mockCategoriesAPI.deleteCategory(id);
+      loadCategories();
+      toast({ title: "Success", description: "Category deleted successfully" });
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to delete category", variant: "destructive" });
+    }
   };
 
   const resetForm = () => {
@@ -98,6 +114,7 @@ const Categories = () => {
     setEditingCategory(null);
   };
 
+  // Stats are based on current page data
   const incomeCategories = categories.filter(c => c.type === "income");
   const expenseCategories = categories.filter(c => c.type === "expense");
 
@@ -112,15 +129,15 @@ const Categories = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="flex items-center gap-2"
             onClick={() => toast({ title: "Exporting", description: "Exporting categories..." })}
           >
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">Export</span>
           </Button>
-          <Button 
+          <Button
             className="flex items-center gap-2"
             onClick={() => {
               resetForm();
@@ -140,7 +157,7 @@ const Categories = () => {
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Categories</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-foreground">{categories.length}</p>
+            <p className="text-2xl font-bold text-foreground">{totalPages * itemsPerPage} (Est.)</p>
           </CardContent>
         </Card>
         <Card>
@@ -156,7 +173,7 @@ const Categories = () => {
             <CardTitle className="text-sm font-medium text-muted-foreground">Expense Categories</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-destructive">{expenseCategories.length}</p>
+            <p className="text-2xl font-bold text-destructive">{expenseCategories.length} </p>
           </CardContent>
         </Card>
         <Card>
@@ -164,7 +181,7 @@ const Categories = () => {
             <CardTitle className="text-sm font-medium text-muted-foreground">Active</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-primary">{categories.filter(c => c.isActive).length}</p>
+            <p className="text-2xl font-bold text-primary">{categories.filter(c => c.isActive).length} </p>
           </CardContent>
         </Card>
       </div>
@@ -172,7 +189,14 @@ const Categories = () => {
       {/* Categories Table */}
       <Card>
         <CardContent className="p-4 sm:p-6">
-          <Tabs defaultValue="all" className="w-full">
+          <Tabs
+            defaultValue="all"
+            className="w-full"
+            onValueChange={(value) => {
+              setActiveTab(value);
+              setCurrentPage(1);
+            }}
+          >
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="income">Income</TabsTrigger>
@@ -243,7 +267,7 @@ const Categories = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {incomeCategories.map((category) => (
+                    {categories.map((category) => (
                       <TableRow key={category.id}>
                         <TableCell className="font-mono text-sm">{category.code}</TableCell>
                         <TableCell className="font-medium">{category.name}</TableCell>
@@ -289,7 +313,7 @@ const Categories = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {expenseCategories.map((category) => (
+                    {categories.map((category) => (
                       <TableRow key={category.id}>
                         <TableCell className="font-mono text-sm">{category.code}</TableCell>
                         <TableCell className="font-medium">{category.name}</TableCell>
@@ -323,6 +347,46 @@ const Categories = () => {
               </div>
             </TabsContent>
           </Tabs>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <RowsPerPageSelector
+                value={itemsPerPage}
+                onValueChange={(value) => {
+                  setItemsPerPage(value);
+                  setCurrentPage(1);
+                }}
+              />
+              <Pagination className="justify-end">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </CardContent>
       </Card>
 

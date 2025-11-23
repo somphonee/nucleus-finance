@@ -23,7 +23,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const { login, register, loginBypass, loginBypassProvince, isAuthenticated, user } = useAuth();
+  const { login, register, loginBypass, loginBypassProvince, loginBypassSuperAdmin, isAuthenticated, user } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
 
@@ -235,6 +235,15 @@ const Login = () => {
                 type="button"
               >
                 Skip Login (Demo mode province)
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => loginBypassSuperAdmin()}
+                type="button"
+              >
+                Skip Login (Demo mode SuperAdmin)
               </Button>
             </div>
           </CardContent>
