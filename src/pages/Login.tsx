@@ -250,48 +250,48 @@ const Login = () => {
         </Card>
 
         {/* Demo Accounts */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">{t('login.demoAccounts')}</CardTitle>
-            <CardDescription className="text-xs">
-              {t('login.demoAccountsDesc')}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div
-              className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"
-              onClick={() => handleDemoLogin('admin@company.com')}
-            >
-              <div className="space-y-1">
-                <p className="text-sm font-medium">{t('login.adminUser')}</p>
-                <p className="text-xs text-muted-foreground">admin@company.com</p>
-              </div>
-              <Badge variant="default">Admin</Badge>
-            </div>
+        {/*<Card>*/}
+        {/*  <CardHeader>*/}
+        {/*    <CardTitle className="text-sm">{t('login.demoAccounts')}</CardTitle>*/}
+        {/*    <CardDescription className="text-xs">*/}
+        {/*      {t('login.demoAccountsDesc')}*/}
+        {/*    </CardDescription>*/}
+        {/*  </CardHeader>*/}
+        {/*  <CardContent className="space-y-3">*/}
+        {/*    <div*/}
+        {/*      className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"*/}
+        {/*      onClick={() => handleDemoLogin('admin@company.com')}*/}
+        {/*    >*/}
+        {/*      <div className="space-y-1">*/}
+        {/*        <p className="text-sm font-medium">{t('login.adminUser')}</p>*/}
+        {/*        <p className="text-xs text-muted-foreground">admin@company.com</p>*/}
+        {/*      </div>*/}
+        {/*      <Badge variant="default">Admin</Badge>*/}
+        {/*    </div>*/}
 
-            <div
-              className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"
-              onClick={() => handleDemoLogin('user@company.com')}
-            >
-              <div className="space-y-1">
-                <p className="text-sm font-medium">{t('login.regularUser')}</p>
-                <p className="text-xs text-muted-foreground">user@company.com</p>
-              </div>
-              <Badge variant="secondary">User</Badge>
-            </div>
+        {/*    <div*/}
+        {/*      className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"*/}
+        {/*      onClick={() => handleDemoLogin('user@company.com')}*/}
+        {/*    >*/}
+        {/*      <div className="space-y-1">*/}
+        {/*        <p className="text-sm font-medium">{t('login.regularUser')}</p>*/}
+        {/*        <p className="text-xs text-muted-foreground">user@company.com</p>*/}
+        {/*      </div>*/}
+        {/*      <Badge variant="secondary">User</Badge>*/}
+        {/*    </div>*/}
 
-            <div
-              className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"
-              onClick={() => handleDemoLogin('userprovince@company.com')}
-            >
-              <div className="space-y-1">
-                <p className="text-sm font-medium">{t('login.provinceUser')}</p>
-                <p className="text-xs text-muted-foreground">userprovince@company.com</p>
-              </div>
-              <Badge variant="outline">Province</Badge>
-            </div>
-          </CardContent>
-        </Card>
+        {/*    <div*/}
+        {/*      className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors"*/}
+        {/*      onClick={() => handleDemoLogin('userprovince@company.com')}*/}
+        {/*    >*/}
+        {/*      <div className="space-y-1">*/}
+        {/*        <p className="text-sm font-medium">{t('login.provinceUser')}</p>*/}
+        {/*        <p className="text-xs text-muted-foreground">userprovince@company.com</p>*/}
+        {/*      </div>*/}
+        {/*      <Badge variant="outline">Province</Badge>*/}
+        {/*    </div>*/}
+        {/*  </CardContent>*/}
+        {/*</Card>*/}
 
         <p className="text-center text-xs text-muted-foreground">
           {t('login.demoNote')}
