@@ -6,7 +6,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { AppLayout } from "./components/layout/AppLayout";
+import { PublicLayout } from "./components/layout/PublicLayout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+
+// Public Pages
+import HomePage from "./pages/public/HomePage";
+import MembersPage from "./pages/public/MembersPage";
+import LegislationPage from "./pages/public/LegislationPage";
+import AccountingToolsPage from "./pages/public/AccountingToolsPage";
+import CooperativesInfoPage from "./pages/public/CooperativesInfoPage";
+import ContactPage from "./pages/public/ContactPage";
+
+// Auth & Admin Pages
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
 import CashManagement from "./pages/CashManagement";
 import MemberSavings from "./pages/MemberSavings";
@@ -15,9 +28,6 @@ import LoanManagement from "./pages/LoanManagement";
 import GeneralLedger from "./pages/GeneralLedger";
 import Reports from "./pages/Reports";
 import UserManagement from "./pages/UserManagement";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
-// Province accounting pages
 import Cashbook from "./pages/Cashbook";
 import Bankbook from "./pages/Bankbook";
 import CardTransactions from "./pages/CardTransactions";
@@ -47,67 +57,43 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
+              <Route path="/members" element={<PublicLayout><MembersPage /></PublicLayout>} />
+              <Route path="/legislation" element={<PublicLayout><LegislationPage /></PublicLayout>} />
+              <Route path="/accounting-tools" element={<PublicLayout><AccountingToolsPage /></PublicLayout>} />
+              <Route path="/cooperatives-info" element={<PublicLayout><CooperativesInfoPage /></PublicLayout>} />
+              <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
+              
+              {/* Auth */}
               <Route path="/login" element={<Login />} />
-              <Route path="/*" element={
+              
+              {/* Admin Routes */}
+              <Route path="/admin/*" element={
                 <ProtectedRoute>
                   <AppLayout>
                     <Routes>
                       <Route path="/" element={<Index />} />
+                      <Route path="/dashboard" element={<Index />} />
                       <Route path="/cash-management" element={<CashManagement />} />
                       <Route path="/member-savings" element={<MemberSavings />} />
                       <Route path="/shares-tracking" element={<SharesTracking />} />
                       <Route path="/loan-management" element={<LoanManagement />} />
                       <Route path="/general-ledger" element={<GeneralLedger />} />
                       <Route path="/reports" element={<Reports />} />
-                      <Route path="/reports" element={<Reports />} />
-
-
                       <Route path="/user-management" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                           <UserManagement />
                         </ProtectedRoute>
                       } />
-                      {/* Province accounting routes */}
-                      <Route path="/cashbook" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <Cashbook />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/bankbook" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <Bankbook />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/card-transactions" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <CardTransactions />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/daily-ledger" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <DailyLedger />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/classified-accounts" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <ClassifiedAccounts />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/trial-balance" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <TrialBalance />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/income-statement" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <IncomeStatement />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/financial-report" element={
-                        <ProtectedRoute allowedRoles={['userprovince']}>
-                          <FinancialReport />
-                        </ProtectedRoute>
-                      } />
+                      <Route path="/cashbook" element={<Cashbook />} />
+                      <Route path="/bankbook" element={<Bankbook />} />
+                      <Route path="/card-transactions" element={<CardTransactions />} />
+                      <Route path="/daily-ledger" element={<DailyLedger />} />
+                      <Route path="/classified-accounts" element={<ClassifiedAccounts />} />
+                      <Route path="/trial-balance" element={<TrialBalance />} />
+                      <Route path="/income-statement" element={<IncomeStatement />} />
+                      <Route path="/financial-report" element={<FinancialReport />} />
                       <Route path="/user-profile" element={<UserProfile />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/categories" element={
@@ -125,27 +111,14 @@ const App = () => (
                           <AuditLogs />
                         </ProtectedRoute>
                       } />
-                      <Route path="/cooperative-registration" element={
-                        <ProtectedRoute allowedRoles={['admin', 'userprovince']}>
-                          <CooperativeRegistration />
-                        </ProtectedRoute>
-                      } />
-                      {/* Cooperative Module Routes - Admin (full access) and Province (view only) */}
-                      <Route path="/cooperatives" element={
-                        <ProtectedRoute allowedRoles={['admin', 'userprovince']}>
-                          <CooperativeList />
-                        </ProtectedRoute>
-                      } />
+                      <Route path="/cooperative-registration" element={<CooperativeRegistration />} />
+                      <Route path="/cooperatives" element={<CooperativeList />} />
                       <Route path="/cooperatives/new" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                           <CooperativeForm />
                         </ProtectedRoute>
                       } />
-                      <Route path="/cooperatives/:id" element={
-                        <ProtectedRoute allowedRoles={['admin', 'userprovince']}>
-                          <CooperativeDetail />
-                        </ProtectedRoute>
-                      } />
+                      <Route path="/cooperatives/:id" element={<CooperativeDetail />} />
                       <Route path="/cooperatives/:id/edit" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                           <CooperativeForm />
@@ -156,6 +129,8 @@ const App = () => (
                   </AppLayout>
                 </ProtectedRoute>
               } />
+              
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </AuthProvider>
