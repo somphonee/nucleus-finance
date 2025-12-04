@@ -193,11 +193,11 @@ export function PublicLayout({ children }: PublicLayoutProps) {
             {/* About */}
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <img src={daecLogo} alt="DAEC Logo" className="h-12 w-auto brightness-0 invert" />
-                <h3 className="text-lg font-bold">DAEC</h3>
+                <img src={daecLogo} alt="DAEC Logo" className="h-16 w-auto" />
+                <h3 className="text-xl font-bold">DAEC</h3>
               </div>
-              <p className="text-sm opacity-80 mb-4">
-                {t('footer.description')}
+              <p className="text-sm opacity-90 mb-4 leading-relaxed">
+                ກົມສົ່ງເສີມກະສິກຳ ແລະ ສະຫະກອນ (ກສກ) ຮັບຜິດຊອບໃນການສົ່ງເສີມການພັດທະນາກະສິກຳ ແລະ ສະໜັບສະໜູນອົງການຈັດຕັ້ງສະຫະກອນໃນທົ່ວ ສປປ ລາວ.
               </p>
             </div>
 
