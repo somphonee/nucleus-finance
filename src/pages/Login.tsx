@@ -35,9 +35,9 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated && user) {
       if (user.role === 'userprovince') {
-        navigate('/cashbook', { replace: true });
+        navigate('/admin/cashbook', { replace: true });
       } else {
-        navigate('/', { replace: true });
+        navigate('/admin', { replace: true });
       }
     }
   }, [isAuthenticated, user, navigate]);
