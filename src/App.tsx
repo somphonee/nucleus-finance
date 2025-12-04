@@ -15,6 +15,7 @@ import MembersPage from "./pages/public/MembersPage";
 import LegislationPage from "./pages/public/LegislationPage";
 import AccountingToolsPage from "./pages/public/AccountingToolsPage";
 import CooperativesInfoPage from "./pages/public/CooperativesInfoPage";
+import CooperativeDetailPage from "./pages/public/CooperativeDetailPage";
 import ContactPage from "./pages/public/ContactPage";
 
 // Auth & Admin Pages
@@ -63,6 +64,7 @@ const App = () => (
               <Route path="/legislation" element={<PublicLayout><LegislationPage /></PublicLayout>} />
               <Route path="/accounting-tools" element={<PublicLayout><AccountingToolsPage /></PublicLayout>} />
               <Route path="/cooperatives-info" element={<PublicLayout><CooperativesInfoPage /></PublicLayout>} />
+              <Route path="/cooperatives-info/:id" element={<CooperativeDetailPage />} />
               <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
               
               {/* Auth */}

@@ -10,7 +10,24 @@ interface LanguageContextType {
 
 const translations = {
   en: {
-    // Navigation
+    // Public Navigation
+    'nav.home': 'Home',
+    'nav.members': 'Members',
+    'nav.legislation': 'Legislation',
+    'nav.accountingTools': 'Accounting Tools',
+    'nav.cooperativesInfo': 'Cooperatives',
+    'nav.contact': 'Contact Us',
+    'nav.login': 'Login',
+    
+    // App Info
+    'app.fullName': 'Department of Agricultural Extension and Cooperatives',
+    
+    // Footer
+    'footer.description': 'The Department of Agricultural Extension and Cooperatives (DAEC) is responsible for promoting agricultural development and supporting cooperative organizations across Lao PDR.',
+    'footer.quickLinks': 'Quick Links',
+    'footer.contactUs': 'Contact Us',
+    
+    // Navigation (Admin)
     'nav.dashboard': 'Dashboard',
     'nav.cashManagement': 'Cash Management',
     'nav.memberSavings': 'Member Savings',
@@ -253,7 +270,24 @@ const translations = {
     'login.invalidCredentials': 'Invalid email or password',
   },
   lo: {
-    // Navigation
+    // Public Navigation
+    'nav.home': 'ໜ້າຫຼັກ',
+    'nav.members': 'ສະມາຊິກ',
+    'nav.legislation': 'ກົດໝາຍ',
+    'nav.accountingTools': 'ເຄື່ອງມືບັນຊີ',
+    'nav.cooperativesInfo': 'ຂໍ້ມູນສະຫະກອນ',
+    'nav.contact': 'ຕິດຕໍ່ພວກເຮົາ',
+    'nav.login': 'ເຂົ້າສູ່ລະບົບ',
+    
+    // App Info
+    'app.fullName': 'ກົມສົ່ງເສີມກະສິກຳ ແລະ ສະຫະກອນ',
+    
+    // Footer
+    'footer.description': 'ກົມສົ່ງເສີມກະສິກຳ ແລະ ສະຫະກອນ (ກສກ) ຮັບຜິດຊອບໃນການສົ່ງເສີມການພັດທະນາກະສິກຳ ແລະ ສະໜັບສະໜູນອົງການຈັດຕັ້ງສະຫະກອນໃນທົ່ວ ສປປ ລາວ.',
+    'footer.quickLinks': 'ລິ້ງດ່ວນ',
+    'footer.contactUs': 'ຕິດຕໍ່ພວກເຮົາ',
+    
+    // Navigation (Admin)
     'nav.dashboard': 'ໜ້າຫຼັກ',
     'nav.cashManagement': 'ການຈັດການເງິນສົດ',
     'nav.memberSavings': 'ເງິນຝາກສະມາຊິກ',

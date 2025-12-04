@@ -43,35 +43,35 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navigationItems = [
-  { title: "nav.dashboard", url: "/", icon: Home },
-  { title: "nav.cashManagement", url: "/cash-management", icon: DollarSign },
-  { title: "nav.memberSavings", url: "/member-savings", icon: Users },
-  { title: "nav.sharesTracking", url: "/shares-tracking", icon: PieChart },
-  { title: "nav.loanManagement", url: "/loan-management", icon: CreditCard },
-  { title: "nav.generalLedger", url: "/general-ledger", icon: FileText },
-  { title: "nav.reports", url: "/reports", icon: BarChart3 },
+  { title: "nav.dashboard", url: "/admin", icon: Home },
+  { title: "nav.cashManagement", url: "/admin/cash-management", icon: DollarSign },
+  { title: "nav.memberSavings", url: "/admin/member-savings", icon: Users },
+  { title: "nav.sharesTracking", url: "/admin/shares-tracking", icon: PieChart },
+  { title: "nav.loanManagement", url: "/admin/loan-management", icon: CreditCard },
+  { title: "nav.generalLedger", url: "/admin/general-ledger", icon: FileText },
+  { title: "nav.reports", url: "/admin/reports", icon: BarChart3 },
 ];
 
 // Province-specific accounting modules
 const provinceAccountingItems = [
-  { title: "nav.cashbook", url: "/cashbook", icon: Wallet },
-  { title: "nav.bankbook", url: "/bankbook", icon: Building2 },
-  { title: "nav.cardTransactions", url: "/card-transactions", icon: CardIcon },
-  { title: "nav.dailyLedger", url: "/daily-ledger", icon: BookOpen },
-  { title: "nav.classifiedAccounts", url: "/classified-accounts", icon: FolderTree },
-  { title: "nav.trialBalance", url: "/trial-balance", icon: Scale },
-  { title: "nav.incomeStatement", url: "/income-statement", icon: TrendingUp },
-  { title: "nav.financialReport", url: "/financial-report", icon: FileBarChart },
+  { title: "nav.cashbook", url: "/admin/cashbook", icon: Wallet },
+  { title: "nav.bankbook", url: "/admin/bankbook", icon: Building2 },
+  { title: "nav.cardTransactions", url: "/admin/card-transactions", icon: CardIcon },
+  { title: "nav.dailyLedger", url: "/admin/daily-ledger", icon: BookOpen },
+  { title: "nav.classifiedAccounts", url: "/admin/classified-accounts", icon: FolderTree },
+  { title: "nav.trialBalance", url: "/admin/trial-balance", icon: Scale },
+  { title: "nav.incomeStatement", url: "/admin/income-statement", icon: TrendingUp },
+  { title: "nav.financialReport", url: "/admin/financial-report", icon: FileBarChart },
 ];
 
 const systemItems = [
-  { title: "nav.cooperativeRegistration", url: "/cooperatives", icon: FileCheck, roles: ['admin', 'userprovince'] },
-  { title: "nav.userManagement", url: "/user-management", icon: UserCog, adminOnly: true },
-  { title: "nav.categories", url: "/categories", icon: Tags, adminOnly: true },
-  { title: "nav.organizations", url: "/organizations", icon: MapPin, adminOnly: true },
-  { title: "nav.auditLogs", url: "/audit-logs", icon: FileSearch, adminOnly: true },
-  { title: "nav.userProfile", url: "/user-profile", icon: User },
-  { title: "nav.settings", url: "/settings", icon: Settings },
+  { title: "nav.cooperativeRegistration", url: "/admin/cooperatives", icon: FileCheck, roles: ['admin', 'userprovince'] },
+  { title: "nav.userManagement", url: "/admin/user-management", icon: UserCog, adminOnly: true },
+  { title: "nav.categories", url: "/admin/categories", icon: Tags, adminOnly: true },
+  { title: "nav.organizations", url: "/admin/organizations", icon: MapPin, adminOnly: true },
+  { title: "nav.auditLogs", url: "/admin/audit-logs", icon: FileSearch, adminOnly: true },
+  { title: "nav.userProfile", url: "/admin/user-profile", icon: User },
+  { title: "nav.settings", url: "/admin/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
